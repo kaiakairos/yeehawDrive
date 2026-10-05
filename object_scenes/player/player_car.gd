@@ -10,7 +10,7 @@ var carDirection :Vector2 = Vector2.RIGHT
 
 var currentSpeed :float = 0.0
 var maxSpeed :float = 400.0
-var absoluteMaxSpeed :float = 800.0
+var absoluteMaxSpeed :float = 1000.0
 
 var tractionLimitDot :float = 0.6
 
@@ -42,11 +42,11 @@ func _process(delta: float) -> void:
 			if Input.is_action_pressed("accelerate"):
 				currentSpeed = min(currentSpeed,absoluteMaxSpeed)
 				if currentSpeed < maxSpeed:
-					currentSpeed = move_toward(currentSpeed,maxSpeed,delta*400.0)
+					currentSpeed = move_toward(currentSpeed,maxSpeed,delta*800.0)
 				else:
-					currentSpeed = move_toward(currentSpeed,maxSpeed,delta*100.0)
+					currentSpeed = move_toward(currentSpeed,maxSpeed,delta*10.0)
 			elif Input.is_action_pressed("brake"):
-				currentSpeed = move_toward(currentSpeed,0.0,delta*500.0)
+				currentSpeed = move_toward(currentSpeed,0.0,delta*800.0)
 			else:
 				currentSpeed = move_toward(currentSpeed,0.0,delta*100.0)
 			
@@ -63,8 +63,9 @@ func _process(delta: float) -> void:
 			else:
 				if Input.is_action_pressed("hop"):
 					trueVelocity = trueVelocity.move_toward(carDirection.normalized() * currentSpeed,delta*600.0)
+					trueVelocity += trueVelocity * 0.005 * (1.0 - abs(dot))
 				else:
-					trueVelocity = trueVelocity.move_toward(carDirection.normalized() * currentSpeed,delta*1800.0)
+					trueVelocity = trueVelocity.move_toward(carDirection.normalized() * currentSpeed,delta*2500.0)
 				$SpriteGroup/rotationOrigin/ColorRect.color = Color.RED
 				drifting = true
 				driftboost += (8.0 * (1.0 - abs(dot))) * min(currentSpeed / maxSpeed,1.0)
@@ -116,6 +117,8 @@ func updateDebugLines() -> void:
 
 func updateDebugLabels() -> void:
 	$Camera2D/speed.text = "set speed: " + str(int(currentSpeed))
+	if driftboost != 0:
+		$Camera2D/dash.text = "drift boost: " + str(int(driftboost))
 
 func placeCamera() -> void:
 	$Camera2D.position = get_local_mouse_position() * Vector2(1.0,0.75) * 0.1

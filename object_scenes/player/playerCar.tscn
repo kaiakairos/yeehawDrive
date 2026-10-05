@@ -65,3 +65,10 @@ offset_top = -144.0
 offset_right = -110.0
 offset_bottom = -121.0
 text = "set speed: "
+
+[node name="dash" type="Label" parent="Camera2D" unique_id=1566725448]
+offset_left = -193.0
+offset_top = -121.0
+offset_right = -110.0
+offset_bottom = -98.0
+text = "drift boost: 0"
