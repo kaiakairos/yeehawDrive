@@ -1,3 +1,7 @@
+# kaia's custom ignores
+.export/
+
+
 # Godot 4+ specific ignores
 .godot/
 .nomedia
