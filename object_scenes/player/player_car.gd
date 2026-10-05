@@ -9,11 +9,10 @@ var wheelMaxAngle :float = 0.3 # max radian angle that tires rotate to
 var carDirection :Vector2 = Vector2.RIGHT
 
 var currentSpeed :float = 0.0
-var maxSpeed :float = 400.0
-var absoluteMaxSpeed :float = 1000.0
+var maxSpeed :float = 320.0
+var absoluteMaxSpeed :float = 640.0
 
-var tractionLimitDot :float = 0.6
-
+var tractionLimitDot :float = 0.7
 var state :int = 0 # 0 drive, 1 hopping
 
 var hopTimer :float = 0.0
@@ -56,19 +55,20 @@ func _process(delta: float) -> void:
 				trueVelocity = trueVelocity.move_toward(carDirection.normalized() * currentSpeed,delta*1800.0)
 				$SpriteGroup/rotationOrigin/ColorRect.color = Color.WHITE
 				if drifting:
-					currentSpeed += driftboost
+					currentSpeed = maxSpeed + driftboost
 					trueVelocity = trueVelocity.move_toward(carDirection.normalized() * currentSpeed,delta*1200.0)
 				drifting = false
 				driftboost = 0.0
 			else:
 				if Input.is_action_pressed("hop"):
-					trueVelocity = trueVelocity.move_toward(carDirection.normalized() * currentSpeed,delta*600.0)
-					trueVelocity += trueVelocity * 0.005 * (1.0 - abs(dot))
+					trueVelocity += trueVelocity * 0.01 * (1.0 - abs(dot))
+					trueVelocity = trueVelocity.move_toward(carDirection.normalized() * currentSpeed,delta*500.0)
+					
 				else:
 					trueVelocity = trueVelocity.move_toward(carDirection.normalized() * currentSpeed,delta*2500.0)
 				$SpriteGroup/rotationOrigin/ColorRect.color = Color.RED
 				drifting = true
-				driftboost += (8.0 * (1.0 - abs(dot))) * min(currentSpeed / maxSpeed,1.0)
+				driftboost += (6.0 * (1.0 - abs(dot))) * min(currentSpeed / maxSpeed,1.0)
 		1: # hopping
 			carDirection = carDirection.rotated( wheelFacingAngle * delta * 8.0 )
 			$SpriteGroup/rotationOrigin/ColorRect.color = Color.YELLOW

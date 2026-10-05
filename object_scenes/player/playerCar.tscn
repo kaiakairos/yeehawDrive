@@ -13,8 +13,8 @@ radius = 6.0827627
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kytb2"]
 shader = ExtResource("2_aol4k")
-shader_parameter/gridSizex = 24
-shader_parameter/gridSizey = 18
+shader_parameter/gridSizex = 32
+shader_parameter/gridSizey = 24
 
 [node name="PlayerCar" type="CharacterBody2D" unique_id=1822216303]
 script = ExtResource("1_rsetr")
@@ -29,10 +29,10 @@ scale = Vector2(1, 0.75)
 [node name="rotationOrigin" type="Node2D" parent="SpriteGroup" unique_id=147573893]
 
 [node name="ColorRect" type="ColorRect" parent="SpriteGroup/rotationOrigin" unique_id=1884349851]
-offset_left = -7.0
-offset_top = -4.0
-offset_right = 7.0
-offset_bottom = 4.0
+offset_left = -9.0
+offset_top = -6.0
+offset_right = 9.0
+offset_bottom = 6.0
 
 [node name="actualVel" type="Line2D" parent="SpriteGroup" unique_id=1269617731]
 points = PackedVector2Array(100, -1, 0, -1)

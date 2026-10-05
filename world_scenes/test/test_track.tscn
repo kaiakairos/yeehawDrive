@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://ioga8i1ygycu"]
+
+[ext_resource type="PackedScene" uid="uid://b3fnthab616xg" path="res://object_scenes/player/playerCar.tscn" id="1_k6c8e"]
+
+[node name="TestTrack" type="Node2D" unique_id=1882377957]
+
+[node name="PlayerCar" parent="." unique_id=1822216303 instance=ExtResource("1_k6c8e")]
+position = Vector2(60, 98)
+
+[node name="Line2D" type="Line2D" parent="." unique_id=1316313952]
+z_index = -140
+points = PackedVector2Array(136, 148, 2179, 232, 2228, 1128, 2173, 1480, 1592, 1526, 1304, 1497, 1329, 582, 1033, 573, 1016, 1497, -183, 1505, -141, 924, -743, 853, -780, 223)
+closed = true
+width = 256.0
+default_color = Color(0.043039158, 0.04303915, 0.04303915, 1)
+joint_mode = 2
