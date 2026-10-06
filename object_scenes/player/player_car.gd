@@ -65,7 +65,7 @@ func _process(delta: float) -> void:
 					trueVelocity = trueVelocity.move_toward(carDirection.normalized() * currentSpeed,delta*500.0)
 					
 				else:
-					trueVelocity = trueVelocity.move_toward(carDirection.normalized() * currentSpeed,delta*2500.0)
+					trueVelocity = trueVelocity.move_toward(carDirection.normalized() * currentSpeed,delta*800.0)
 				$SpriteGroup/rotationOrigin/ColorRect.color = Color.RED
 				drifting = true
 				driftboost += (6.0 * (1.0 - abs(dot))) * min(currentSpeed / maxSpeed,1.0)

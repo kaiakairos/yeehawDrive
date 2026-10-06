@@ -35,6 +35,7 @@ offset_right = 9.0
 offset_bottom = 6.0
 
 [node name="actualVel" type="Line2D" parent="SpriteGroup" unique_id=1269617731]
+visible = false
 points = PackedVector2Array(100, -1, 0, -1)
 width = 2.0
 default_color = Color(0.38169557, 0.31337723, 1, 1)

@@ -8,6 +8,7 @@
 position = Vector2(60, 98)
 
 [node name="Line2D" type="Line2D" parent="." unique_id=1316313952]
+visible = false
 z_index = -140
 points = PackedVector2Array(136, 148, 2179, 232, 2228, 1128, 2173, 1480, 1592, 1526, 1304, 1497, 1329, 582, 1033, 573, 1016, 1497, -183, 1505, -141, 924, -743, 853, -780, 223)
 closed = true
