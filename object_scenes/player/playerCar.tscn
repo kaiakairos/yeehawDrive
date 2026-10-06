@@ -8,6 +8,10 @@ _limits = [0.0, 0.2, 0.0, 1.0]
 _data = [Vector2(0, 0), 0.0, 1.1109314, 0, 0, Vector2(0.5061224, 0.2), 0.0, 0.0, 0, 0]
 point_count = 2
 
+[sub_resource type="Curve" id="Curve_2mpte"]
+_data = [Vector2(0, 0), 0.0, 3.9834328, 0, 0, Vector2(0.5098039, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.7420135, 0.0, 0, 0]
+point_count = 3
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_kytb2"]
 radius = 6.0827627
 
@@ -19,6 +23,7 @@ shader_parameter/gridSizey = 24
 [node name="PlayerCar" type="CharacterBody2D" unique_id=1822216303]
 script = ExtResource("1_rsetr")
 turnStrengthCurve = SubResource("Curve_rsetr")
+hopAnimationCurve = SubResource("Curve_2mpte")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=83995325]
 shape = SubResource("CircleShape2D_kytb2")
@@ -28,14 +33,21 @@ scale = Vector2(1, 0.75)
 
 [node name="rotationOrigin" type="Node2D" parent="SpriteGroup" unique_id=147573893]
 
-[node name="ColorRect" type="ColorRect" parent="SpriteGroup/rotationOrigin" unique_id=1884349851]
-offset_left = -9.0
-offset_top = -6.0
-offset_right = 9.0
-offset_bottom = 6.0
+[node name="otherRotate" type="Node2D" parent="SpriteGroup" unique_id=1867736109]
+
+[node name="Marker2D" type="Marker2D" parent="SpriteGroup/otherRotate" unique_id=1116236888]
+position = Vector2(9, -6.666667)
+
+[node name="Marker2D2" type="Marker2D" parent="SpriteGroup/otherRotate" unique_id=976792982]
+position = Vector2(9, 6.666667)
+
+[node name="Marker2D3" type="Marker2D" parent="SpriteGroup/otherRotate" unique_id=405500148]
+position = Vector2(-9, 6.666667)
+
+[node name="Marker2D4" type="Marker2D" parent="SpriteGroup/otherRotate" unique_id=74391056]
+position = Vector2(-9, -6.666667)
 
 [node name="actualVel" type="Line2D" parent="SpriteGroup" unique_id=1269617731]
-visible = false
 points = PackedVector2Array(100, -1, 0, -1)
 width = 2.0
 default_color = Color(0.38169557, 0.31337723, 1, 1)

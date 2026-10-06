@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://crwggixjc8eb4"]
+
+[ext_resource type="Script" uid="uid://bv74wdsypd72a" path="res://object_scenes/effects/tireTracks/tire_tracks.gd" id="1_ablhx"]
+
+[sub_resource type="Gradient" id="Gradient_aol4k"]
+colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 0.6784314)
+
+[node name="TireTracks" type="Node2D" unique_id=2111373638]
+z_index = -10
+script = ExtResource("1_ablhx")
+
+[node name="Line2D" type="Line2D" parent="." unique_id=991341724]
+width = 2.0
+default_color = Color(0, 0, 0, 0.6901961)
+gradient = SubResource("Gradient_aol4k")
+
+[node name="Line2D2" type="Line2D" parent="." unique_id=2142011179]
+width = 2.0
+default_color = Color(0, 0, 0, 0.6901961)
+gradient = SubResource("Gradient_aol4k")
+
+[node name="Line2D3" type="Line2D" parent="." unique_id=403483449]
+width = 2.0
+default_color = Color(0, 0, 0, 0.6901961)
+gradient = SubResource("Gradient_aol4k")
+
+[node name="Line2D4" type="Line2D" parent="." unique_id=1036788860]
+width = 2.0
+default_color = Color(0, 0, 0, 0.6901961)
+gradient = SubResource("Gradient_aol4k")

@@ -1,8 +1,10 @@
 [gd_scene format=3 uid="uid://ioga8i1ygycu"]
 
+[ext_resource type="Script" uid="uid://clwsh3bpb5w3i" path="res://world_scenes/test/test_track.gd" id="1_35rhc"]
 [ext_resource type="PackedScene" uid="uid://b3fnthab616xg" path="res://object_scenes/player/playerCar.tscn" id="1_k6c8e"]
 
 [node name="TestTrack" type="Node2D" unique_id=1882377957]
+script = ExtResource("1_35rhc")
 
 [node name="PlayerCar" parent="." unique_id=1822216303 instance=ExtResource("1_k6c8e")]
 position = Vector2(60, 98)
