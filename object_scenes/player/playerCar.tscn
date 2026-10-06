@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b3fnthab616xg"]
 
 [ext_resource type="Script" uid="uid://nw2nemsknabv" path="res://object_scenes/player/player_car.gd" id="1_rsetr"]
+[ext_resource type="Texture2D" uid="uid://b1a3ff0tffs74" path="res://object_scenes/player/sprites/shadow.png" id="2_2mpte"]
 [ext_resource type="Shader" uid="uid://bf4wy7tk3btxo" path="res://zeeg/shaders_materials/worldGridPlaceholder/worldGridPlaceHolder.gdshader" id="2_aol4k"]
 
 [sub_resource type="Curve" id="Curve_rsetr"]
@@ -9,8 +10,8 @@ _data = [Vector2(0, 0), 0.0, 1.1109314, 0, 0, Vector2(0.5061224, 0.2), 0.0, 0.0,
 point_count = 2
 
 [sub_resource type="Curve" id="Curve_2mpte"]
-_data = [Vector2(0, 0), 0.0, 3.9834328, 0, 0, Vector2(0.5098039, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -3.7420135, 0.0, 0, 0]
-point_count = 3
+_data = [Vector2(0, 0), 0.0, 3.9834328, 0, 0, Vector2(0.5098039, 1), 0.0, 0.0, 0, 0, Vector2(0.76875, 0), -3.6781611, 1.5991997, 0, 0, Vector2(0.878125, 0.4482758), 0.0, 0.0, 0, 0, Vector2(1, 0), -5.614035, 0.0, 0, 0]
+point_count = 5
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_kytb2"]
 radius = 6.0827627
@@ -47,6 +48,10 @@ position = Vector2(-9, 6.666667)
 [node name="Marker2D4" type="Marker2D" parent="SpriteGroup/otherRotate" unique_id=74391056]
 position = Vector2(-9, -6.666667)
 
+[node name="Shadow" type="Sprite2D" parent="SpriteGroup/otherRotate" unique_id=182853938]
+z_index = -2
+texture = ExtResource("2_2mpte")
+
 [node name="actualVel" type="Line2D" parent="SpriteGroup" unique_id=1269617731]
 points = PackedVector2Array(100, -1, 0, -1)
 width = 2.0
@@ -67,10 +72,10 @@ default_color = Color(1, 0, 0, 1)
 [node name="ColorRect" type="ColorRect" parent="Camera2D" unique_id=355313353]
 z_index = -97
 material = SubResource("ShaderMaterial_kytb2")
-offset_left = -1004.0
-offset_top = -856.0
-offset_right = 1112.0
-offset_bottom = 993.0
+offset_left = -215.0
+offset_top = -165.0
+offset_right = 220.0
+offset_bottom = 177.0
 
 [node name="speed" type="Label" parent="Camera2D" unique_id=131739813]
 offset_left = -193.0

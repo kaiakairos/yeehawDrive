@@ -12,9 +12,19 @@ void fragment() {
 	int gridX = int(world_pos.x) / gridSizex;
 	int gridY = int(world_pos.y) / gridSizey;
 	
+	if (world_pos.x < -0.0){ gridX -= 1; }
+	if (world_pos.y < -0.0){ gridY -= 1; }
+	
 	if(abs(gridX) % 2 == abs(gridY) % 2){
 		COLOR.rgb = vec3(0.0);
 		
 	}
 	COLOR.a = 0.1;
+	
+	if(abs(world_pos.x) < 2.0 || abs(world_pos.y) < 2.0){ 
+	COLOR.rgb = vec3(0.0);
+	COLOR.a = 1.0;
+	}
+	
+	
 }

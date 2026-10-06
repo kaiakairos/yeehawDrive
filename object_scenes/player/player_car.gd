@@ -62,7 +62,7 @@ func _process(delta: float) -> void:
 			
 			var dot :float = carDirection.normalized().dot(trueVelocity.normalized())
 			var dotReversed :float = 1.0 - abs(dot) # = 1.0 if drift perpendicular, 0.0 if parallel
-			if dot > tractionLimitDot:
+			if dot > tractionLimitDot or currentSpeed < 20:
 				trueVelocity = trueVelocity.move_toward(carDirection.normalized() * currentSpeed,delta*1800.0)
 				$SpriteGroup/rotationOrigin.modulate = Color.WHITE
 				if drifting:
@@ -102,7 +102,10 @@ func _process(delta: float) -> void:
 			if hopTimer > hopTimeAmount:
 				state = 0
 				driftVelLengthSave = trueVelocity.length()
-			$SpriteGroup/rotationOrigin.position.y = hopAnimationCurve.sample( hopTimer/hopTimeAmount) * -8.0
+			var hopSample :float = hopAnimationCurve.sample( hopTimer/hopTimeAmount)
+			$SpriteGroup/rotationOrigin.position.y = hopSample * -8.0
+			var erm :float = 1.0 - (hopSample*0.25)
+			$SpriteGroup/otherRotate/Shadow.scale = Vector2(erm,erm)
 	
 	#print(trueVelocity)
 	velocity = trueVelocity * Vector2(1.0,0.75)
