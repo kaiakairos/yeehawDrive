@@ -86,7 +86,7 @@ func _process(delta: float) -> void:
 						printerr("Safety Stillness Protocal activated")
 						trueVelocity = carDirection.normalized()
 				else:
-					trueVelocity = trueVelocity.move_toward(carDirection.normalized() * currentSpeed,delta*800.0)
+					trueVelocity = trueVelocity.move_toward(carDirection.normalized() * currentSpeed,delta*2000.0)
 					driftVelLengthSave = trueVelocity.length()
 				$SpriteGroup/rotationOrigin.modulate = Color.RED
 				if !drifting:
