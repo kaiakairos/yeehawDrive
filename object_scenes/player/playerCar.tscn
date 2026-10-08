@@ -24,12 +24,11 @@ shader_parameter/line_thickness = 1
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kytb2"]
 shader = ExtResource("2_aol4k")
-shader_parameter/gridSizex = 32
-shader_parameter/gridSizey = 24
+shader_parameter/gridSizex = 48
+shader_parameter/gridSizey = 48
 
 [node name="PlayerCar" type="CharacterBody2D" unique_id=1822216303 node_paths=PackedStringArray("spriteStackContainer", "otherContainer", "camera", "shadow", "debugLineVelocity", "debugLineCarFacingDir", "dbeugLineWheelFacingDir", "label1", "label2", "tireMarker1", "tireMarker2", "tireMarker3", "tireMarker4")]
 script = ExtResource("1_rsetr")
-frictionMultiplier = 1.2
 turnStrengthCurve = SubResource("Curve_rsetr")
 hopAnimationCurve = SubResource("Curve_2mpte")
 spriteStackContainer = NodePath("SpriteGroup/spriteContainer")

@@ -6,6 +6,12 @@ varying vec2 world_pos;
 
 void vertex() {
     world_pos = (MODEL_MATRIX * vec4(VERTEX, 0.0, 1.0)).xy;
+	float save = world_pos.x;
+	
+	world_pos.y /= 0.75;
+	
+	world_pos.x += world_pos.y;
+	world_pos.y -= save;
 }
 
 void fragment() {
