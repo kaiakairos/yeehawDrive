@@ -103,6 +103,20 @@ position = Vector2(176, 264)
 scale = Vector2(6, 6)
 texture = ExtResource("4_pek5h")
 
+[node name="Icon5" type="Sprite2D" parent="." unique_id=211532129]
+z_index = -150
+material = SubResource("ShaderMaterial_35rhc")
+position = Vector2(-176, 264)
+scale = Vector2(6, 6)
+texture = ExtResource("4_pek5h")
+
+[node name="Icon6" type="Sprite2D" parent="." unique_id=1257086003]
+z_index = -150
+material = SubResource("ShaderMaterial_35rhc")
+position = Vector2(0, 396)
+scale = Vector2(6, 6)
+texture = ExtResource("4_pek5h")
+
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=813620163]
 tile_map_data = PackedByteArray("AAD7//v/AAABAAIAAAD7//z/AAABAAIAAAD3/wQAAAABAAIAAAASAPX/AAABAAIAAAATAPb/AAABAAIAAAATAPf/AAABAAIAAAATAPj/AAABAAIAAAATAPn/AAABAAIAAAATAPr/AAABAAIAAAATAPv/AAABAAIAAAATAPz/AAABAAIAAAATAP3/AAABAAIAAAATAP7/AAABAAIAAAATAP//AAABAAIAAAAUAAAAAAABAAIAAAATAAEAAAABAAIAAAAUAAIAAAABAAIAAAAUAAMAAAABAAIAAAAUAAQAAAABAAIAAAAUAAUAAAABAAIAAAAVAAYAAAABAAIAAAAVAAcAAAABAAIAAAAVAAgAAAABAAIAAAAVAAkAAAABAAIAAAAVAAoAAAABAAIAAAAUAAsAAAABAAIAAAAUAAwAAAABAAIAAAD+////AAACAAEAAAD9////AAACAAEAAAD9/wAAAAACAAEAAAD9//7/AAACAAEAAAD///3/AAACAAEAAAD+//z/AAACAAEAAAD///v/AAACAAEAAAD///z/AAACAAEAAAA=")
 tile_set = SubResource("TileSet_kytb2")
