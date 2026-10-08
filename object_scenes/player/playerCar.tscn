@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://nw2nemsknabv" path="res://object_scenes/player/player_car.gd" id="1_rsetr"]
 [ext_resource type="Texture2D" uid="uid://b1a3ff0tffs74" path="res://object_scenes/player/sprites/shadow.png" id="2_2mpte"]
-[ext_resource type="Shader" uid="uid://bf4wy7tk3btxo" path="res://zeeg/shaders_materials/worldGridPlaceholder/worldGridPlaceHolder.gdshader" id="2_aol4k"]
 [ext_resource type="Shader" uid="uid://cyxywsc0jbfnw" path="res://zeeg/shaders_materials/canvasGroupOutline/canvasGroupOutline.gdshader" id="2_m5nwo"]
+[ext_resource type="Material" uid="uid://blthl8litkxca" path="res://zeeg/shaders_materials/worldGridPlaceholder/worldGridPlaceholder.tres" id="4_m5nwo"]
 
 [sub_resource type="Curve" id="Curve_rsetr"]
 _limits = [0.0, 0.2, 0.0, 1.0]
@@ -21,11 +21,6 @@ radius = 6.0827627
 shader = ExtResource("2_m5nwo")
 shader_parameter/line_colour = Color(0, 0, 0, 1)
 shader_parameter/line_thickness = 1
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_kytb2"]
-shader = ExtResource("2_aol4k")
-shader_parameter/gridSizex = 48
-shader_parameter/gridSizey = 48
 
 [node name="PlayerCar" type="CharacterBody2D" unique_id=1822216303 node_paths=PackedStringArray("spriteStackContainer", "otherContainer", "camera", "shadow", "debugLineVelocity", "debugLineCarFacingDir", "dbeugLineWheelFacingDir", "label1", "label2", "tireMarker1", "tireMarker2", "tireMarker3", "tireMarker4")]
 script = ExtResource("1_rsetr")
@@ -91,7 +86,7 @@ default_color = Color(1, 0, 0, 1)
 
 [node name="ColorRect" type="ColorRect" parent="Camera2D" unique_id=355313353]
 z_index = -97
-material = SubResource("ShaderMaterial_kytb2")
+material = ExtResource("4_m5nwo")
 offset_left = -258.0
 offset_top = -196.0
 offset_right = 257.0

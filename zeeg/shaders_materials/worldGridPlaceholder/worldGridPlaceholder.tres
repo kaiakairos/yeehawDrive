@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://blthl8litkxca"]
+
+[ext_resource type="Shader" uid="uid://bf4wy7tk3btxo" path="res://zeeg/shaders_materials/worldGridPlaceholder/worldGridPlaceHolder.gdshader" id="1_fionn"]
+
+[resource]
+shader = ExtResource("1_fionn")
+shader_parameter/gridSizex = 44
+shader_parameter/gridSizey = 44
