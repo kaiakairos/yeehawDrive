@@ -1,23 +1,46 @@
 class_name PlayerCar
 extends CharacterBody2D
 
+@export_group("Stats")
+@export var cameraReachLimit :int = 64.0
+@export var maxSpeed :float = 380.0
+@export var absoluteMaxSpeed :float = 850.0
+@export var hopTimeAmount :float = 0.25 # time hop takes
+@export var wheelMaxAngle :float = 0.3 # max radian angle that tires rotate to
+@export var frictionMultiplier :float = 1.0
+@export_group("Curves")
 @export var turnStrengthCurve :Curve
+@export var hopAnimationCurve :Curve
+@export_group("Nodes")
+@export var spriteStackContainer :Node2D
+@export var otherContainer :Node2D
+@export var camera :Camera2D
+@export_subgroup("Effects")
+@export var shadow :Sprite2D
+@export_subgroup("Debug Lines")
+@export var showDebugLines :bool = true
+@export var debugLineVelocity :Line2D
+@export var debugLineCarFacingDir :Line2D
+@export var dbeugLineWheelFacingDir :Line2D
+@export_subgroup("Debug Text")
+@export var label1 :Label
+@export var label2 :Label
+@export_subgroup("TireTraceMarkers")
+@export var tireMarker1 :Marker2D
+@export var tireMarker2 :Marker2D
+@export var tireMarker3 :Marker2D
+@export var tireMarker4 :Marker2D
 
 var wheelFacingAngle :float = 0.0 # -1.0, 0.0, 1.0 for left, center, right
-var wheelMaxAngle :float = 0.3 # max radian angle that tires rotate to
 
 var carDirection :Vector2 = Vector2.RIGHT
 
 var currentSpeed :float = 0.0
-var maxSpeed :float = 380.0
-var absoluteMaxSpeed :float = 700.0
 
 var tractionLimitDot :float = 0.7
 var state :int = 0 # 0 drive, 1 hopping
 
-@export var hopAnimationCurve :Curve
 var hopTimer :float = 0.0
-const hopTimeAmount :float = 0.25
 
 var drifting : bool = false
 var driftboost :float = 0.0
@@ -35,99 +58,108 @@ func _ready() -> void:
 		spr.texture = load("res://object_scenes/player/sprites/greenSquare.png")
 		spr.hframes = frameTotal
 		spr.frame = i
-		$SpriteGroup/rotationOrigin.add_child(spr)
+		spriteStackContainer.add_child(spr)
+	
+	debugLineVelocity.visible = showDebugLines
+	debugLineCarFacingDir.visible = showDebugLines
+	dbeugLineWheelFacingDir.visible = showDebugLines
 
 func _process(delta: float) -> void:
 	processWheelDirection(delta)
-	if Input.is_action_just_pressed("hop") and state == 0 and !drifting:
-		state = 1
-		hopTimer = 0.0
-		driftboost = 0.0
-	
-	#print(driftboost)
+	checkforHopInput()
 	
 	match state:
 		0: # drive
 			turnVehicle()
-			if Input.is_action_pressed("accelerate"):
-				currentSpeed = min(currentSpeed,absoluteMaxSpeed)
-				if currentSpeed < maxSpeed:
-					currentSpeed = move_toward(currentSpeed,maxSpeed,delta*800.0)
-				else:
-					currentSpeed = move_toward(currentSpeed,maxSpeed,delta*60.0)
-			elif Input.is_action_pressed("brake"):
-				currentSpeed = move_toward(currentSpeed,0.0,delta*800.0)
-			else:
-				currentSpeed = move_toward(currentSpeed,0.0,delta*100.0)
-			
+			applyAcceleration(delta)
 			var dot :float = carDirection.normalized().dot(trueVelocity.normalized())
-			var dotReversed :float = 1.0 - abs(dot) # = 1.0 if drift perpendicular, 0.0 if parallel
 			if dot > tractionLimitDot or currentSpeed < 20:
-				trueVelocity = trueVelocity.move_toward(carDirection.normalized() * currentSpeed,delta*1800.0)
-				$SpriteGroup/rotationOrigin.modulate = Color.WHITE
-				if drifting:
-					currentSpeed = currentSpeed + driftboost
-					trueVelocity = trueVelocity.move_toward(carDirection.normalized() * currentSpeed,delta*1200.0)
-				drifting = false
-				driftboost = 0.0
+				driveStateNormal(delta)
 			else:
-				
-				if Input.is_action_pressed("hop"):
-					if Input.is_action_pressed("accelerate"):
-						trueVelocity = trueVelocity.move_toward(carDirection.normalized() * currentSpeed,delta*900.0)
-					else:
-						driftVelLengthSave = move_toward(driftVelLengthSave,0.0,delta*400.0)
-					trueVelocity = trueVelocity.normalized() * driftVelLengthSave
-					var um :float = abs(dot)
-					if um < 0.2:
-						um = 0.0
-					driftVelLengthSave = move_toward(driftVelLengthSave,0.0,delta*900.0 * um)
-					if trueVelocity.length() <= 0.0001:
-						printerr("Safety Stillness Protocal activated")
-						trueVelocity = carDirection.normalized()
-				else:
-					trueVelocity = trueVelocity.move_toward(carDirection.normalized() * currentSpeed,delta*2000.0)
-					driftVelLengthSave = trueVelocity.length()
-				$SpriteGroup/rotationOrigin.modulate = Color.RED
-				if !drifting:
-					createNewTireTrack()
-				drifting = true
-				
-				
-				driftboost += (6.0 * dotReversed) * min(currentSpeed / maxSpeed,1.0)
+				driveStateDrift(delta,dot)
 		1: # hopping
-			carDirection = carDirection.rotated( wheelFacingAngle * delta * 8.0 )
-			$SpriteGroup/rotationOrigin.modulate = Color.YELLOW
-			hopTimer += delta
-			if hopTimer > hopTimeAmount:
-				state = 0
-				driftVelLengthSave = trueVelocity.length()
-			var hopSample :float = hopAnimationCurve.sample( hopTimer/hopTimeAmount)
-			$SpriteGroup/rotationOrigin.position.y = hopSample * -8.0
-			var erm :float = 1.0 - (hopSample*0.25)
-			$SpriteGroup/otherRotate/Shadow.scale = Vector2(erm,erm)
+			hoppingState(delta)
 	
-	#print(trueVelocity)
-	velocity = trueVelocity * Vector2(1.0,0.75)
-	move_and_slide()
+	velocity = trueVelocity * Vector2(1.0,0.75) # apply velocity changes
+	move_and_slide() # move and shit
 	
-	
-	if drifting:
-		if is_instance_valid(assignedTireTrack):
-					assignedTireTrack.addPoints($SpriteGroup/otherRotate/Marker2D.global_position,
-					$SpriteGroup/otherRotate/Marker2D2.global_position,
-					$SpriteGroup/otherRotate/Marker2D3.global_position,
-					$SpriteGroup/otherRotate/Marker2D4.global_position)
-	
+	updateTireTrack()
 	placeCamera()
-	
 	stackThemSprites()
+	otherContainer.rotation = carDirection.angle()
 	
-	$SpriteGroup/otherRotate.rotation = carDirection.angle()
-	
-	updateDebugLines()
+	if showDebugLines:
+		updateDebugLines()
 	updateDebugLabels()
 
+func applyAcceleration(delta:float) -> void:
+	var target :float = 0.0
+	var rate :float = 0.0
+	if Input.is_action_pressed("accelerate"):
+		target = maxSpeed
+		rate = 60.0 + (740.0 * int(currentSpeed < maxSpeed))
+	else:
+		rate = 100.0 + (700.0 * int(Input.is_action_pressed("brake")))
+	
+	currentSpeed = move_toward(currentSpeed,target,delta*rate)
+	currentSpeed = min(currentSpeed,absoluteMaxSpeed) # cap speed
+
+func driveStateNormal(delta:float) -> void:
+	trueVelocity = trueVelocity.move_toward(carDirection.normalized() * currentSpeed,delta*1800.0*frictionMultiplier)
+	spriteStackContainer.modulate = Color.WHITE
+	if drifting and Input.is_action_pressed("accelerate"):
+		currentSpeed = maxSpeed + driftboost
+		trueVelocity = trueVelocity.move_toward(carDirection.normalized() * currentSpeed,delta*1200.0*frictionMultiplier)
+	drifting = false
+	driftboost = 0.0
+
+func driveStateDrift(delta:float,dot:float) -> void:
+	## IS DRIFTING
+	if Input.is_action_pressed("hop"):
+		if Input.is_action_pressed("accelerate"):
+			trueVelocity = trueVelocity.move_toward(carDirection.normalized() * currentSpeed,delta*1600.0*frictionMultiplier)
+		else:
+			driftVelLengthSave = move_toward(driftVelLengthSave,0.0,delta*400.0*frictionMultiplier)
+		trueVelocity = trueVelocity.normalized() * driftVelLengthSave
+		var um :float = abs(dot)
+		if um < 0.2:
+			um = 0.0
+		driftVelLengthSave = move_toward(driftVelLengthSave,0.0,delta*900.0 * um*frictionMultiplier)
+		if trueVelocity.length() <= 0.0001:
+			if Input.is_action_pressed("accelerate"):
+				printerr("Safety Stillness Protocal activated")
+				trueVelocity = carDirection.normalized()
+			else:
+				currentSpeed = 0
+				drifting = false
+	else:
+		trueVelocity = trueVelocity.move_toward(carDirection.normalized() * currentSpeed,delta*2000.0*frictionMultiplier)
+		driftVelLengthSave = trueVelocity.length()
+	#spriteStackContainer.modulate = Color.RED
+	if !drifting:
+			createNewTireTrack()
+	drifting = true
+	driftboost += (6.0 * (1.0 - abs(dot))) * min(currentSpeed / maxSpeed,1.0)
+
+func checkforHopInput() -> void: # Check to see if we've jumped and apply state change
+	if state != 0 or drifting:
+		return
+	if Input.is_action_just_pressed("hop"): 
+		state = 1
+		hopTimer = 0.0
+		driftboost = 0.0
+
+func hoppingState(delta:float) -> void: # hopping behavior
+	carDirection = carDirection.rotated( wheelFacingAngle * delta * 8.0 )
+	#spriteStackContainer.modulate = Color.YELLOW
+	hopTimer += delta
+	if hopTimer > hopTimeAmount:
+		state = 0
+		driftVelLengthSave = trueVelocity.length()
+	var hopSample :float = hopAnimationCurve.sample( hopTimer/hopTimeAmount)
+	spriteStackContainer.position.y = hopSample * -8.0
+	var erm :float = 1.0 - (hopSample*0.25)
+	shadow.scale = Vector2(erm,erm)
 
 func processWheelDirection(delta:float) -> void:
 	var wheelTarget :float = 0.0
@@ -136,7 +168,6 @@ func processWheelDirection(delta:float) -> void:
 	if Input.is_action_pressed("turnRight"):
 		wheelTarget += 1.0
 	wheelFacingAngle = move_toward(wheelFacingAngle,wheelTarget,delta*6.0)
-	#print(wheelFacingAngle)
 
 func turnVehicle(multiplier:float = 1.0) -> void:
 	carDirection = Vector2.from_angle( 
@@ -145,33 +176,33 @@ func turnVehicle(multiplier:float = 1.0) -> void:
 		turnStrengthCurve.sample(currentSpeed/maxSpeed)) * multiplier) 
 
 func updateDebugLines() -> void:
-	$SpriteGroup/wheelMotion.clear_points()
-	$SpriteGroup/wheelMotion.add_point(Vector2.ZERO)
-	$SpriteGroup/wheelMotion.add_point(carDirection.rotated(wheelMaxAngle * wheelFacingAngle).normalized()  * 32)
+	dbeugLineWheelFacingDir.clear_points()
+	dbeugLineWheelFacingDir.add_point(Vector2.ZERO)
+	dbeugLineWheelFacingDir.add_point(carDirection.rotated(wheelMaxAngle * wheelFacingAngle).normalized()  * 32)
 	
-	$SpriteGroup/carFacing.clear_points()
-	$SpriteGroup/carFacing.add_point(Vector2.ZERO)
-	$SpriteGroup/carFacing.add_point(carDirection.normalized()  * 24)
+	debugLineCarFacingDir.clear_points()
+	debugLineCarFacingDir.add_point(Vector2.ZERO)
+	debugLineCarFacingDir.add_point(carDirection.normalized()  * 24)
 	
-	$SpriteGroup/actualVel.clear_points()
-	$SpriteGroup/actualVel.add_point(Vector2.ZERO)
-	$SpriteGroup/actualVel.add_point(trueVelocity * 0.2)
+	debugLineVelocity.clear_points()
+	debugLineVelocity.add_point(Vector2.ZERO)
+	debugLineVelocity.add_point(trueVelocity * 0.2)
 
 func updateDebugLabels() -> void:
-	$Camera2D/speed.text = "set speed: " + str(int(currentSpeed))
+	label1.text = "set speed: " + str(int(currentSpeed))
 	if driftboost != 0:
-		$Camera2D/dash.text = "drift boost: " + str(int(driftboost))
+		label2.text = "drift boost: " + str(int(driftboost))
 
 func placeCamera() -> void:
-	$Camera2D.position = get_local_mouse_position() * Vector2(1.0,0.75) * 0.1
-	if $Camera2D.position.length() > 48:
-		$Camera2D.position = $Camera2D.position.normalized() * 48
-	$Camera2D.position.x = roundi($Camera2D.position.x)
-	$Camera2D.position.y = roundi($Camera2D.position.y)
+	camera.position = get_local_mouse_position() * Vector2(1.0,0.75) * 0.1
+	if camera.position.length() > cameraReachLimit:
+		camera.position = camera.position.normalized() * cameraReachLimit
+	camera.position.x = roundi(camera.position.x)
+	camera.position.y = roundi(camera.position.y)
 
 func stackThemSprites() -> void:
 	var i :int = 0
-	for child in $SpriteGroup/rotationOrigin.get_children():
+	for child in spriteStackContainer.get_children():
 		child.position.y = -i * 0.5
 		child.rotation =  carDirection.angle()
 		i += 1
@@ -180,3 +211,9 @@ func createNewTireTrack() -> void:
 	var obj :Node2D = load("res://object_scenes/effects/tireTracks/tire_tracks.tscn").instantiate()
 	get_parent().add_child(obj)
 	assignedTireTrack = obj
+
+func updateTireTrack() -> void: # updates tire tracks
+	if !drifting or !is_instance_valid(assignedTireTrack):
+		return
+	assignedTireTrack.addPoints(tireMarker1.global_position,tireMarker2.global_position,
+	tireMarker3.global_position,tireMarker4.global_position)

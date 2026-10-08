@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://nw2nemsknabv" path="res://object_scenes/player/player_car.gd" id="1_rsetr"]
 [ext_resource type="Texture2D" uid="uid://b1a3ff0tffs74" path="res://object_scenes/player/sprites/shadow.png" id="2_2mpte"]
 [ext_resource type="Shader" uid="uid://bf4wy7tk3btxo" path="res://zeeg/shaders_materials/worldGridPlaceholder/worldGridPlaceHolder.gdshader" id="2_aol4k"]
+[ext_resource type="Shader" uid="uid://cyxywsc0jbfnw" path="res://zeeg/shaders_materials/canvasGroupOutline/canvasGroupOutline.gdshader" id="2_m5nwo"]
 
 [sub_resource type="Curve" id="Curve_rsetr"]
 _limits = [0.0, 0.2, 0.0, 1.0]
@@ -16,39 +17,59 @@ point_count = 5
 [sub_resource type="CircleShape2D" id="CircleShape2D_kytb2"]
 radius = 6.0827627
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m5nwo"]
+shader = ExtResource("2_m5nwo")
+shader_parameter/line_colour = Color(0, 0, 0, 1)
+shader_parameter/line_thickness = 1
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kytb2"]
 shader = ExtResource("2_aol4k")
 shader_parameter/gridSizex = 32
 shader_parameter/gridSizey = 24
 
-[node name="PlayerCar" type="CharacterBody2D" unique_id=1822216303]
+[node name="PlayerCar" type="CharacterBody2D" unique_id=1822216303 node_paths=PackedStringArray("spriteStackContainer", "otherContainer", "camera", "shadow", "debugLineVelocity", "debugLineCarFacingDir", "dbeugLineWheelFacingDir", "label1", "label2", "tireMarker1", "tireMarker2", "tireMarker3", "tireMarker4")]
 script = ExtResource("1_rsetr")
+frictionMultiplier = 1.2
 turnStrengthCurve = SubResource("Curve_rsetr")
 hopAnimationCurve = SubResource("Curve_2mpte")
+spriteStackContainer = NodePath("SpriteGroup/spriteContainer")
+otherContainer = NodePath("SpriteGroup/otherContainer")
+camera = NodePath("Camera2D")
+shadow = NodePath("SpriteGroup/otherContainer/Shadow")
+debugLineVelocity = NodePath("SpriteGroup/actualVel")
+debugLineCarFacingDir = NodePath("SpriteGroup/carFacing")
+dbeugLineWheelFacingDir = NodePath("SpriteGroup/wheelMotion")
+label1 = NodePath("Camera2D/Label1")
+label2 = NodePath("Camera2D/Label2")
+tireMarker1 = NodePath("SpriteGroup/otherContainer/Marker2D")
+tireMarker2 = NodePath("SpriteGroup/otherContainer/Marker2D2")
+tireMarker3 = NodePath("SpriteGroup/otherContainer/Marker2D3")
+tireMarker4 = NodePath("SpriteGroup/otherContainer/Marker2D4")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=83995325]
 shape = SubResource("CircleShape2D_kytb2")
 
 [node name="SpriteGroup" type="CanvasGroup" parent="." unique_id=1294703876]
+material = SubResource("ShaderMaterial_m5nwo")
 scale = Vector2(1, 0.75)
 
-[node name="rotationOrigin" type="Node2D" parent="SpriteGroup" unique_id=147573893]
+[node name="spriteContainer" type="Node2D" parent="SpriteGroup" unique_id=147573893]
 
-[node name="otherRotate" type="Node2D" parent="SpriteGroup" unique_id=1867736109]
+[node name="otherContainer" type="Node2D" parent="SpriteGroup" unique_id=1867736109]
 
-[node name="Marker2D" type="Marker2D" parent="SpriteGroup/otherRotate" unique_id=1116236888]
+[node name="Marker2D" type="Marker2D" parent="SpriteGroup/otherContainer" unique_id=1116236888]
 position = Vector2(9, -6.666667)
 
-[node name="Marker2D2" type="Marker2D" parent="SpriteGroup/otherRotate" unique_id=976792982]
+[node name="Marker2D2" type="Marker2D" parent="SpriteGroup/otherContainer" unique_id=976792982]
 position = Vector2(9, 6.666667)
 
-[node name="Marker2D3" type="Marker2D" parent="SpriteGroup/otherRotate" unique_id=405500148]
+[node name="Marker2D3" type="Marker2D" parent="SpriteGroup/otherContainer" unique_id=405500148]
 position = Vector2(-9, 6.666667)
 
-[node name="Marker2D4" type="Marker2D" parent="SpriteGroup/otherRotate" unique_id=74391056]
+[node name="Marker2D4" type="Marker2D" parent="SpriteGroup/otherContainer" unique_id=74391056]
 position = Vector2(-9, -6.666667)
 
-[node name="Shadow" type="Sprite2D" parent="SpriteGroup/otherRotate" unique_id=182853938]
+[node name="Shadow" type="Sprite2D" parent="SpriteGroup/otherContainer" unique_id=182853938]
 z_index = -2
 texture = ExtResource("2_2mpte")
 
@@ -72,21 +93,21 @@ default_color = Color(1, 0, 0, 1)
 [node name="ColorRect" type="ColorRect" parent="Camera2D" unique_id=355313353]
 z_index = -97
 material = SubResource("ShaderMaterial_kytb2")
-offset_left = -215.0
-offset_top = -165.0
-offset_right = 220.0
-offset_bottom = 177.0
+offset_left = -258.0
+offset_top = -196.0
+offset_right = 257.0
+offset_bottom = 194.0
 
-[node name="speed" type="Label" parent="Camera2D" unique_id=131739813]
-offset_left = -193.0
-offset_top = -144.0
-offset_right = -110.0
-offset_bottom = -121.0
-text = "set speed: "
+[node name="Label1" type="Label" parent="Camera2D" unique_id=131739813]
+offset_left = -230.0
+offset_top = -172.0
+offset_right = -146.0
+offset_bottom = -149.0
+text = "debug text"
 
-[node name="dash" type="Label" parent="Camera2D" unique_id=1566725448]
-offset_left = -193.0
-offset_top = -121.0
-offset_right = -110.0
-offset_bottom = -98.0
-text = "drift boost: 0"
+[node name="Label2" type="Label" parent="Camera2D" unique_id=1566725448]
+offset_left = -230.0
+offset_top = -149.0
+offset_right = -146.0
+offset_bottom = -126.0
+text = "debug text"
