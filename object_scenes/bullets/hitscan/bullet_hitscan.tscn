@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://bfg5d14l42b6c"]
+
+[ext_resource type="Script" uid="uid://ckgh45bqr5yks" path="res://object_scenes/bullets/hitscan/bullet_hitscan.gd" id="1_rjwew"]
+
+[node name="BulletHitscan" type="Node2D" unique_id=963192860 node_paths=PackedStringArray("raycast", "line")]
+script = ExtResource("1_rjwew")
+raycast = NodePath("RayCast2D")
+line = NodePath("Line2D")
+
+[node name="RayCast2D" type="RayCast2D" parent="." unique_id=1362223178]
+target_position = Vector2(256, 0)
+
+[node name="Line2D" type="Line2D" parent="." unique_id=692163547]
+width = 2.0

@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://b1a3ff0tffs74" path="res://object_scenes/player/sprites/shadow.png" id="2_2mpte"]
 [ext_resource type="Shader" uid="uid://cyxywsc0jbfnw" path="res://zeeg/shaders_materials/canvasGroupOutline/canvasGroupOutline.gdshader" id="2_m5nwo"]
 [ext_resource type="Material" uid="uid://blthl8litkxca" path="res://zeeg/shaders_materials/worldGridPlaceholder/worldGridPlaceholder.tres" id="4_m5nwo"]
+[ext_resource type="Script" uid="uid://bgqml2m1hmbl2" path="res://object_scenes/player/gun_handler.gd" id="5_dnn2p"]
 
 [sub_resource type="Curve" id="Curve_rsetr"]
 _limits = [0.0, 0.2, 0.0, 1.0]
@@ -105,3 +106,8 @@ offset_top = -149.0
 offset_right = -146.0
 offset_bottom = -126.0
 text = "debug text"
+
+[node name="GunHandler" type="Node2D" parent="." unique_id=404493069 node_paths=PackedStringArray("player")]
+position = Vector2(0, -11)
+script = ExtResource("5_dnn2p")
+player = NodePath("..")

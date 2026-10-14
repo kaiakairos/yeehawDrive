@@ -2,9 +2,9 @@ class_name PlayerCar
 extends CharacterBody2D
 
 @export_group("Stats")
-@export var cameraReachLimit :int = 64.0
-@export var maxSpeed :float = 380.0
-@export var absoluteMaxSpeed :float = 850.0
+@export var cameraReachLimit :int = 80.0
+@export var maxSpeed :float = 400.0
+@export var absoluteMaxSpeed :float = 1000.0
 @export var hopTimeAmount :float = 0.25 # time hop takes
 @export var wheelMaxAngle :float = 0.3 # max radian angle that tires rotate to
 @export var frictionMultiplier :float = 1.0
@@ -108,7 +108,7 @@ func driveStateNormal(delta:float) -> void:
 	trueVelocity = trueVelocity.move_toward(carDirection.normalized() * currentSpeed,delta*1800.0*frictionMultiplier)
 	spriteStackContainer.modulate = Color.WHITE
 	if drifting and Input.is_action_pressed("accelerate"):
-		currentSpeed = maxSpeed + driftboost
+		currentSpeed = currentSpeed + driftboost
 		trueVelocity = trueVelocity.move_toward(carDirection.normalized() * currentSpeed,delta*1200.0*frictionMultiplier)
 	drifting = false
 	driftboost = 0.0
@@ -122,7 +122,7 @@ func driveStateDrift(delta:float,dot:float) -> void:
 			driftVelLengthSave = move_toward(driftVelLengthSave,0.0,delta*400.0*frictionMultiplier)
 		trueVelocity = trueVelocity.normalized() * driftVelLengthSave
 		var um :float = abs(dot)
-		if um < 0.2:
+		if um < 0.7:
 			um = 0.0
 		driftVelLengthSave = move_toward(driftVelLengthSave,0.0,delta*900.0 * um*frictionMultiplier)
 		if trueVelocity.length() <= 0.0001:
@@ -139,7 +139,7 @@ func driveStateDrift(delta:float,dot:float) -> void:
 	if !drifting:
 			createNewTireTrack()
 	drifting = true
-	driftboost += (6.0 * (1.0 - abs(dot))) * min(currentSpeed / maxSpeed,1.0)
+	driftboost += (3.0 * (1.0 - abs(dot))) * min(currentSpeed / maxSpeed,1.0)
 
 func checkforHopInput() -> void: # Check to see if we've jumped and apply state change
 	if state != 0 or drifting:
@@ -194,7 +194,7 @@ func updateDebugLabels() -> void:
 		label2.text = "drift boost: " + str(int(driftboost))
 
 func placeCamera() -> void:
-	camera.position = get_local_mouse_position() * Vector2(1.0,0.75) * 0.1
+	camera.position = get_local_mouse_position() * Vector2(1.0,0.75) * 0.5
 	if camera.position.length() > cameraReachLimit:
 		camera.position = camera.position.normalized() * cameraReachLimit
 	camera.position.x = roundi(camera.position.x)
