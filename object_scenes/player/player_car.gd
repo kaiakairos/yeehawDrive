@@ -139,7 +139,7 @@ func driveStateDrift(delta:float,dot:float) -> void:
 	if !drifting:
 			createNewTireTrack()
 	drifting = true
-	driftboost += (3.0 * (1.0 - abs(dot))) * min(currentSpeed / maxSpeed,1.0)
+	driftboost += (3.5 * (1.0 - abs(dot))) * min(currentSpeed / maxSpeed,1.0)
 
 func checkforHopInput() -> void: # Check to see if we've jumped and apply state change
 	if state != 0 or drifting:

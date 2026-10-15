@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://b788xrla7fjpg"]
+
+[ext_resource type="Script" uid="uid://dd3k3bcmh44rm" path="res://object_scenes/bulletCasing/bullet_casing.gd" id="1_5h63b"]
+[ext_resource type="Texture2D" uid="uid://bmi6dfyph5mgk" path="res://object_scenes/bulletCasing/casing.png" id="2_kcsmu"]
+[ext_resource type="Texture2D" uid="uid://twslll0tu5pb" path="res://object_scenes/bulletCasing/shadow.png" id="3_kcsmu"]
+
+[sub_resource type="Curve" id="Curve_kytb2"]
+_data = [Vector2(0, 0), 0.0, 8.206825, 0, 0, Vector2(0.20641273, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.006036401), -3.1375716, 0.0, 0, 0]
+point_count = 3
+
+[node name="bulletCasing" type="Node2D" unique_id=605404968 node_paths=PackedStringArray("sprite", "shadow")]
+script = ExtResource("1_5h63b")
+sprite = NodePath("Sprite")
+shadow = NodePath("Shadow")
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=686531458]
+texture = ExtResource("2_kcsmu")
+offset = Vector2(0, -2)
+hframes = 3
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="Sprite" unique_id=2115965440]
+amount = 16
+gravity = Vector2(0, -10)
+scale_amount_min = 1.45
+scale_amount_max = 4.3
+scale_amount_curve = SubResource("Curve_kytb2")
+color = Color(0, 0, 0, 0.40784314)
+
+[node name="Shadow" type="Sprite2D" parent="." unique_id=1413972972]
+z_index = -5
+texture = ExtResource("3_kcsmu")

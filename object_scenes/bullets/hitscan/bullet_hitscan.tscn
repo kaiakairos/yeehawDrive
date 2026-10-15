@@ -1,14 +1,34 @@
 [gd_scene format=3 uid="uid://bfg5d14l42b6c"]
 
 [ext_resource type="Script" uid="uid://ckgh45bqr5yks" path="res://object_scenes/bullets/hitscan/bullet_hitscan.gd" id="1_rjwew"]
+[ext_resource type="Texture2D" uid="uid://daqcc3prs8box" path="res://object_scenes/bullets/hitscan/sprite.png" id="2_yhqt4"]
 
-[node name="BulletHitscan" type="Node2D" unique_id=963192860 node_paths=PackedStringArray("raycast", "line")]
+[sub_resource type="Gradient" id="Gradient_rjwew"]
+colors = PackedColorArray(1, 1, 1, 1, 0.7372549, 0.7372549, 0.65882355, 0.827451)
+
+[sub_resource type="Curve" id="Curve_rjwew"]
+_data = [Vector2(0, 0.42166334), 0.0, 1.1178006, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="BulletHitscan" type="Node2D" unique_id=963192860 node_paths=PackedStringArray("raycast", "shadowLine", "bulletLine")]
 script = ExtResource("1_rjwew")
+gradient = SubResource("Gradient_rjwew")
 raycast = NodePath("RayCast2D")
-line = NodePath("Line2D")
+shadowLine = NodePath("shadowLine")
+bulletLine = NodePath("bulletLine")
 
 [node name="RayCast2D" type="RayCast2D" parent="." unique_id=1362223178]
 target_position = Vector2(256, 0)
 
-[node name="Line2D" type="Line2D" parent="." unique_id=692163547]
-width = 2.0
+[node name="shadowLine" type="Line2D" parent="." unique_id=692163547]
+z_index = -5
+width = 3.0
+width_curve = SubResource("Curve_rjwew")
+default_color = Color(0, 0, 0, 1)
+
+[node name="bulletLine" type="Line2D" parent="." unique_id=1543095899]
+position = Vector2(0, -8)
+width = 4.0
+width_curve = SubResource("Curve_rjwew")
+texture = ExtResource("2_yhqt4")
+texture_mode = 2

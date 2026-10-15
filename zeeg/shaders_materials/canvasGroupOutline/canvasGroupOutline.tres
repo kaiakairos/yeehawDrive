@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://dpas1j5aixd1e"]
+
+[ext_resource type="Shader" uid="uid://cyxywsc0jbfnw" path="res://zeeg/shaders_materials/canvasGroupOutline/canvasGroupOutline.gdshader" id="1_dpyng"]
+
+[resource]
+shader = ExtResource("1_dpyng")
+shader_parameter/line_colour = Color(0, 0, 0, 1)
+shader_parameter/line_thickness = 1

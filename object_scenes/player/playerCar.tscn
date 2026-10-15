@@ -2,7 +2,8 @@
 
 [ext_resource type="Script" uid="uid://nw2nemsknabv" path="res://object_scenes/player/player_car.gd" id="1_rsetr"]
 [ext_resource type="Texture2D" uid="uid://b1a3ff0tffs74" path="res://object_scenes/player/sprites/shadow.png" id="2_2mpte"]
-[ext_resource type="Shader" uid="uid://cyxywsc0jbfnw" path="res://zeeg/shaders_materials/canvasGroupOutline/canvasGroupOutline.gdshader" id="2_m5nwo"]
+[ext_resource type="Material" uid="uid://dpas1j5aixd1e" path="res://zeeg/shaders_materials/canvasGroupOutline/canvasGroupOutline.tres" id="2_eamtm"]
+[ext_resource type="Texture2D" uid="uid://bcps8mno6b8bl" path="res://object_scenes/player/sprites/flash.png" id="4_eamtm"]
 [ext_resource type="Material" uid="uid://blthl8litkxca" path="res://zeeg/shaders_materials/worldGridPlaceholder/worldGridPlaceholder.tres" id="4_m5nwo"]
 [ext_resource type="Script" uid="uid://bgqml2m1hmbl2" path="res://object_scenes/player/gun_handler.gd" id="5_dnn2p"]
 
@@ -17,11 +18,6 @@ point_count = 5
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_kytb2"]
 radius = 6.0827627
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_m5nwo"]
-shader = ExtResource("2_m5nwo")
-shader_parameter/line_colour = Color(0, 0, 0, 1)
-shader_parameter/line_thickness = 1
 
 [node name="PlayerCar" type="CharacterBody2D" unique_id=1822216303 node_paths=PackedStringArray("spriteStackContainer", "otherContainer", "camera", "shadow", "debugLineVelocity", "debugLineCarFacingDir", "dbeugLineWheelFacingDir", "label1", "label2", "tireMarker1", "tireMarker2", "tireMarker3", "tireMarker4")]
 script = ExtResource("1_rsetr")
@@ -45,7 +41,7 @@ tireMarker4 = NodePath("SpriteGroup/otherContainer/Marker2D4")
 shape = SubResource("CircleShape2D_kytb2")
 
 [node name="SpriteGroup" type="CanvasGroup" parent="." unique_id=1294703876]
-material = SubResource("ShaderMaterial_m5nwo")
+material = ExtResource("2_eamtm")
 scale = Vector2(1, 0.75)
 
 [node name="spriteContainer" type="Node2D" parent="SpriteGroup" unique_id=147573893]
@@ -107,7 +103,28 @@ offset_right = -146.0
 offset_bottom = -126.0
 text = "debug text"
 
-[node name="GunHandler" type="Node2D" parent="." unique_id=404493069 node_paths=PackedStringArray("player")]
-position = Vector2(0, -11)
+[node name="GunHandler" type="Node2D" parent="." unique_id=404493069 node_paths=PackedStringArray("flashSprite1", "flashSprite2", "player")]
 script = ExtResource("5_dnn2p")
+flashSprite1 = NodePath("../CanvasGroup/effects/Flash")
+flashSprite2 = NodePath("../CanvasGroup/effects/Flash2")
 player = NodePath("..")
+
+[node name="CanvasGroup" type="CanvasGroup" parent="." unique_id=1716653435]
+z_index = 1
+material = ExtResource("2_eamtm")
+scale = Vector2(1, 0.75)
+
+[node name="effects" type="Node2D" parent="CanvasGroup" unique_id=1447116433]
+scale = Vector2(1, 1.3333334)
+
+[node name="Flash" type="Sprite2D" parent="CanvasGroup/effects" unique_id=640637529]
+position = Vector2(-3.5762787e-07, -9)
+rotation = 0.80798316
+scale = Vector2(3.3100002, 3.3099997)
+texture = ExtResource("4_eamtm")
+
+[node name="Flash2" type="Sprite2D" parent="CanvasGroup/effects" unique_id=1927615242]
+position = Vector2(11, -9)
+rotation = 0.80798316
+scale = Vector2(3.3100002, 3.3099997)
+texture = ExtResource("4_eamtm")
