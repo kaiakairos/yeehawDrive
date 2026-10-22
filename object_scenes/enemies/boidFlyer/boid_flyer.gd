@@ -38,7 +38,7 @@ func _process(delta: float) -> void:
 func stateNormal(vel:Vector2,delta:float) -> Vector2:
 	
 	var player :PlayerCar = GlobalReference.player
-	var distanceVector :Vector2 = (player.predictFuturePosition(0.1) + Vector2(8,0).rotated(offsetTargetAngle).rotated(player.velocity.angle())) - global_position
+	var distanceVector :Vector2 = (player.predictFuturePosition(0.25) + Vector2(8,0).rotated(offsetTargetAngle).rotated(player.velocity.angle())) - global_position
 	
 	#global_position = distanceVector + global_position debug
 	
@@ -56,8 +56,8 @@ func stateNormal(vel:Vector2,delta:float) -> Vector2:
 	if vel.length() < 400:
 		vel = vel.normalized() * 400
 	
-	if distanceVector.length() < 24:
-		state = states.EXPLODE
-		$ColorRect.show()
+	#if distanceVector.length() < 24:
+	#	state = states.EXPLODE
+	#	$ColorRect.show()
 	
 	return vel
