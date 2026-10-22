@@ -51,6 +51,11 @@ var driftVelLengthSave :float = 0.0
 var assignedTireTrack :Node2D = null
 
 func _ready() -> void:
+	
+	GlobalReference.player = self
+	add_to_group("boidAvoid")
+	
+	
 	# generate sprite sheet automatically
 	var frameTotal :int = 20
 	for i in range(frameTotal):
@@ -217,3 +222,8 @@ func updateTireTrack() -> void: # updates tire tracks
 		return
 	assignedTireTrack.addPoints(tireMarker1.global_position,tireMarker2.global_position,
 	tireMarker3.global_position,tireMarker4.global_position)
+
+func predictFuturePosition(time:float) -> Vector2:
+	return global_position + (time * velocity)
+	
+	

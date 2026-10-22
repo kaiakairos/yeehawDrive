@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://clioghtldn7s2"]
+
+[ext_resource type="Script" uid="uid://cjyixqnvh3xy2" path="res://object_scenes/enemies/boidFlyer/boid_flyer.gd" id="1_e0s1s"]
+[ext_resource type="Texture2D" uid="uid://twslll0tu5pb" path="res://object_scenes/bulletCasing/shadow.png" id="2_f68dx"]
+
+[node name="BoidFlyer" type="Node2D" unique_id=1505610253]
+script = ExtResource("1_e0s1s")
+
+[node name="Shadow2" type="Sprite2D" parent="." unique_id=388810015]
+texture = ExtResource("2_f68dx")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1427636127]
+visible = false
+offset_left = -19.0
+offset_top = -40.0
+offset_right = 21.0
+color = Color(1, 0.09803922, 0.0627451, 1)
