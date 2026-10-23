@@ -2,16 +2,55 @@
 
 [ext_resource type="Script" uid="uid://cjyixqnvh3xy2" path="res://object_scenes/enemies/boidFlyer/boid_flyer.gd" id="1_e0s1s"]
 [ext_resource type="Texture2D" uid="uid://twslll0tu5pb" path="res://object_scenes/bulletCasing/shadow.png" id="2_f68dx"]
+[ext_resource type="Texture2D" uid="uid://cdnawlxgh2imq" path="res://object_scenes/enemies/boidFlyer/placeholder.png" id="3_alaup"]
 
-[node name="BoidFlyer" type="Node2D" unique_id=1505610253]
+[sub_resource type="Curve" id="Curve_alaup"]
+_data = [Vector2(0.42550415, 1), -0.79463464, -0.79463464, 0, 0, Vector2(0.5816525, 0.4648437), -1.3444318, 0.0, 0, 0, Vector2(0.80286264, 0.6210937), 2.7710333, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_7lida"]
+_data = [Vector2(0, 1), 0.0, -3.8452046, 0, 0, Vector2(0.5003252, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.47089484, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_usivf"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_alaup"]
+offsets = PackedFloat32Array(0, 0.30902517, 0.7241876, 1)
+colors = PackedColorArray(1, 0, 0, 1, 1, 0.45882353, 0, 1, 1, 0.7254902, 0, 1, 1, 1, 1, 1)
+
+[node name="BoidFlyer" type="Node2D" unique_id=1505610253 node_paths=PackedStringArray("heightSpriteOrigin")]
 script = ExtResource("1_e0s1s")
+heightSpriteOrigin = NodePath("HeightSpriteOrigin")
+heightMax = 48.0
+normalHeightCurve = SubResource("Curve_alaup")
+dashHeightCurve = SubResource("Curve_7lida")
 
 [node name="Shadow2" type="Sprite2D" parent="." unique_id=388810015]
+z_index = -5
 texture = ExtResource("2_f68dx")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=1427636127]
-visible = false
-offset_left = -19.0
-offset_top = -40.0
-offset_right = 21.0
-color = Color(1, 0.09803922, 0.0627451, 1)
+[node name="Line2D2" type="Line2D" parent="." unique_id=87815400]
+z_index = -5
+width = 3.0
+width_curve = SubResource("Curve_usivf")
+default_color = Color(0, 0, 0, 1)
+
+[node name="Line2D" type="Line2D" parent="." unique_id=2146172308]
+width = 3.0
+width_curve = SubResource("Curve_usivf")
+gradient = SubResource("Gradient_alaup")
+
+[node name="HeightSpriteOrigin" type="Node2D" parent="." unique_id=606557846]
+
+[node name="Placeholder" type="Sprite2D" parent="HeightSpriteOrigin" unique_id=927486970]
+modulate = Color(1, 0.46666667, 0, 1)
+position = Vector2(0, -4)
+scale = Vector2(1.725, 1.725)
+texture = ExtResource("3_alaup")
+
+[node name="Placeholder2" type="Sprite2D" parent="HeightSpriteOrigin" unique_id=758763971]
+position = Vector2(0, -4)
+scale = Vector2(0.69, 0.69)
+texture = ExtResource("3_alaup")
