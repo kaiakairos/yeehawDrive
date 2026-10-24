@@ -3,7 +3,7 @@ extends SubViewport
 @export var parent :PlayerCar
 
 func _process(delta: float) -> void:
-	$brakeLight.visible = Input.is_action_pressed("brake")
+	$brakeLight.visible = Input.is_action_pressed("brake") or Input.is_action_pressed("hop")
 	
 	$wheels/wheel1.rotate(parent.velocity.length() * delta * -0.06)
 	$wheels/wheel2.rotate(parent.velocity.length() * delta * -0.06)

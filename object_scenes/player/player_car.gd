@@ -54,7 +54,6 @@ var assignedTireTrack :Node2D = null
 var lostControlTick :float = 0.0
 var carForceRotate:float = 0.0
 
-
 func _ready() -> void:
 	
 	GlobalReference.player = self
@@ -89,8 +88,6 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	processWheelDirection(delta)
 	checkforHopInput()
-	
-	
 	
 	match state:
 		0: # drive
@@ -299,3 +296,5 @@ func antennaAnimation() -> void:
 	$SpriteGroup/otherContainer/antenna.add_point(Vector2(0,-6))
 	$SpriteGroup/otherContainer/antenna.add_point(Vector2(0,-10) + (velocity * -0.005))
 	$SpriteGroup/otherContainer/antenna.add_point(Vector2(0,-13) + (velocity * -0.012))
+	#$SpriteGroup/otherContainer/antenna/emblem.position = Vector2(0,-13) + (velocity * -0.012)
+	#$SpriteGroup/otherContainer/antenna/emblem.rotation = $SpriteGroup/otherContainer/antenna.get_point_position(1).angle_to($SpriteGroup/otherContainer/antenna.get_point_position(2))
