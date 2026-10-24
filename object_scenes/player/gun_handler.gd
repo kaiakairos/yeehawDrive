@@ -3,10 +3,12 @@ extends Node2D
 
 @export var flashSprite1 :Sprite2D
 @export var flashSprite2 :Sprite2D
-
+@export var flashSpriteUV :Sprite2D
 
 @export var player :PlayerCar
-@export var delay :float = 0.12
+@export var delay :float = 0.2
+@export var delayBoost :float = 0.12
+@export var delayBoost2 :float = 0.11
 @export var accuracy :float = 0.16
 
 var timer :float = 0.0
@@ -24,13 +26,13 @@ func _process(delta: float) -> void:
 	#BULLETMODE = 2
 	if Input.is_action_just_pressed("shoot"):
 		summonBullet()
-		timer = delay
+		resetTimer()
 	
 	if Input.is_action_pressed("shoot") and timer <= 0.0:
 		summonBullet()
-		timer = delay
+		resetTimer()
 
-	$"../SubViewport/Flash".modulate.a = move_toward($"../SubViewport/Flash".modulate.a,0.0,delta * 4.0)
+	flashSpriteUV.modulate.a = move_toward(flashSpriteUV.modulate.a,0.0,delta * 4.0)
 
 func summonBullet()-> void:
 	var obj :BulletHitscan = load("res://object_scenes/bullets/hitscan/bullet_hitscan.tscn").instantiate()
@@ -54,6 +56,11 @@ func createCasing() -> void:
 
 
 func blastEffect()-> void:
+	
+	flashSprite1.frame = BULLETMODE
+	flashSprite2.frame = BULLETMODE
+	flashSpriteUV.frame = BULLETMODE
+	
 	flashSprite1.show()
 	flashSprite2.show()
 	
@@ -65,8 +72,8 @@ func blastEffect()-> void:
 	
 	flashSprite2.position = flashSprite1.position + (get_local_mouse_position().normalized() * 12)
 	
-	$"../SubViewport/Flash".modulate.a = 0.5
-	$"../SubViewport/Flash".rotation = randf()
+	flashSpriteUV.modulate.a = 0.5
+	flashSpriteUV.rotation = randf()
 	
 	await get_tree().process_frame
 	flashSprite2.scale = Vector2(1.5,1.5)
@@ -76,3 +83,8 @@ func blastEffect()-> void:
 	flashSprite1.hide()
 	flashSprite2.hide()
 	
+func resetTimer() -> void:
+	match BULLETMODE:
+		0: timer = delay
+		1: timer = delayBoost
+		2: timer = delayBoost2

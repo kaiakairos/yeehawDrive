@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://bh2ea7pbxgj5v"]
+
+[ext_resource type="Script" uid="uid://bshwsg4u1vr0p" path="res://ui_scenes/simpleProgressBar/simple_progress_bar.gd" id="1_5j1hc"]
+
+[node name="simpleProgressBar" type="Node2D" unique_id=1382119039]
+script = ExtResource("1_5j1hc")
+
+[node name="bg" type="ColorRect" parent="." unique_id=737068317]
+offset_right = 3.0
+offset_bottom = 8.0
+color = Color(0, 0, 0, 1)
+
+[node name="progress" type="ColorRect" parent="." unique_id=2052019805]
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 2.0
+offset_bottom = 7.0
+color = Color(0, 1, 0, 1)

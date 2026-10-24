@@ -98,13 +98,13 @@ func _process(delta: float) -> void:
 			var dot :float = carDirection.normalized().dot(trueVelocity.normalized())
 			if dot > tractionLimitDot or currentSpeed < 20:
 				driveStateNormal(delta)
-				if currentSpeed > 700:
+				if currentSpeed > 850:
 					gunHandler.setBulletMode(1)
 				else:
 					gunHandler.setBulletMode(0)
 			else:
 				driveStateDrift(delta,dot)
-				if driftboost > 620:
+				if driftboost > 900:
 					gunHandler.setBulletMode(2)
 				elif driftboost > 250:
 					gunHandler.setBulletMode(1)
@@ -197,7 +197,7 @@ func driveStateDrift(delta:float,dot:float) -> void:
 	if !drifting:
 			createNewTireTrack()
 	drifting = true
-	driftboost += (4.2 * (1.0 - abs(dot))) * min(currentSpeed / maxSpeed,1.0)
+	driftboost += (4.2 * (0.8 - abs(dot))) * min(currentSpeed / maxSpeed,1.0)
 
 func checkforHopInput() -> void: # Check to see if we've jumped and apply state change
 	if state != 0 or drifting:

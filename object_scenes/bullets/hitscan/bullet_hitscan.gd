@@ -26,7 +26,7 @@ func _ready() -> void:
 	
 	var lineLength :float = 420
 	
-	var guy :Array[Hitbox]= ManagerDamager.getHitboxOnLine(global_position,Vector2(1,0).rotated(rotation),lineLength,GlobalReference.player,false)
+	var guy :Array[Hitbox]= ManagerDamager.getHitboxOnLine(global_position,Vector2(1,0).rotated(rotation),lineLength,type*4.0,GlobalReference.player,false)
 	if guy.size() > 0:
 		lineLength = guy[0].global_position.distance_to(global_position)
 		guy[0].healthCompenent.recieveKnockback( Vector2(200,0).rotated(rotation) )

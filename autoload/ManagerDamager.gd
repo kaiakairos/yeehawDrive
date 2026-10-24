@@ -8,13 +8,13 @@ func getAllHitboxes() -> Array[Hitbox]:
 			poop.append(i)
 	return poop
 
-func getHitboxOnLine(sourcePosition:Vector2,direction:Vector2,lineRange:float=500,sourceEntity:Node=null,hitmultiple:bool=false) -> Array[Hitbox]:
+func getHitboxOnLine(sourcePosition:Vector2,direction:Vector2,lineRange:float=500,lineWidth:float=0.0,sourceEntity:Node=null,hitmultiple:bool=false) -> Array[Hitbox]:
 	var collidedHitboxes :Array[Hitbox] = []
 	for hitbox in getAllHitboxes():
 		if hitbox.parentObject == sourceEntity:
 			continue # make sure entities don't attack themselves
 		
-		var response :float = Geometry2D.segment_intersects_circle(sourcePosition,sourcePosition + (direction.normalized()*lineRange),hitbox.global_position,hitbox.radius)
+		var response :float = Geometry2D.segment_intersects_circle(sourcePosition,sourcePosition + (direction.normalized()*lineRange),hitbox.global_position,hitbox.radius + lineWidth)
 		if response > -0.1:
 			collidedHitboxes.append(hitbox)
 	

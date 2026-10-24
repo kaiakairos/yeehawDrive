@@ -42,6 +42,9 @@ shader_parameter/uvMapTexture = SubResource("ViewportTexture_nct0c")
 [sub_resource type="Gradient" id="Gradient_k6d32"]
 colors = PackedColorArray(1, 0.11207495, 0, 1, 1, 0, 0, 1)
 
+[sub_resource type="ViewportTexture" id="ViewportTexture_kytb2"]
+viewport_path = NodePath("SubViewport")
+
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_y8uur"]
 blend_mode = 1
 
@@ -145,10 +148,17 @@ offset_right = -146.0
 offset_bottom = -126.0
 text = "debug text"
 
-[node name="GunHandler" type="Node2D" parent="." unique_id=404493069 node_paths=PackedStringArray("flashSprite1", "flashSprite2", "player")]
+[node name="Sprite2D" type="Sprite2D" parent="Camera2D" unique_id=377607441]
+position = Vector2(144, -177)
+texture = SubResource("ViewportTexture_kytb2")
+centered = false
+offset = Vector2(0, 0.5)
+
+[node name="GunHandler" type="Node2D" parent="." unique_id=404493069 node_paths=PackedStringArray("flashSprite1", "flashSprite2", "flashSpriteUV", "player")]
 script = ExtResource("5_dnn2p")
 flashSprite1 = NodePath("../CanvasGroup/effects/Flash")
 flashSprite2 = NodePath("../CanvasGroup/effects/Flash2")
+flashSpriteUV = NodePath("../SubViewport/Flash")
 player = NodePath("..")
 
 [node name="CanvasGroup" type="CanvasGroup" parent="." unique_id=1716653435]
@@ -165,6 +175,7 @@ position = Vector2(-3.5762787e-07, -9)
 rotation = 0.80798316
 scale = Vector2(3.3100002, 3.3099997)
 texture = ExtResource("4_eamtm")
+hframes = 3
 
 [node name="Flash2" type="Sprite2D" parent="CanvasGroup/effects" unique_id=1927615242]
 visible = false
@@ -172,6 +183,7 @@ position = Vector2(11, -9)
 rotation = 0.80798316
 scale = Vector2(3.3100002, 3.3099997)
 texture = ExtResource("4_eamtm")
+hframes = 3
 
 [node name="HealthComponent" type="Node" parent="." unique_id=180869992]
 script = ExtResource("7_1pw4n")
@@ -210,6 +222,7 @@ modulate = Color(1, 1, 1, 0)
 position = Vector2(40.82, 22.36)
 scale = Vector2(3.08, 3.08)
 texture = ExtResource("4_eamtm")
+hframes = 3
 
 [node name="brakeLight" type="Sprite2D" parent="SubViewport" unique_id=15831787]
 visible = false
