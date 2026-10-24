@@ -10,7 +10,7 @@ var health :int = 100
 var healthUpgradeLevel :int = 1
 @export var healthIncreasePerLevel :int = 5
 
-signal tookDamage
+signal tookDamage(amount:int)
 signal justgotkilled
 var emittedKilled :bool = false
 
@@ -46,7 +46,7 @@ func dealDamage(amount:int=0) -> void:
 	
 	
 	
-	emit_signal("tookDamage")
+	emit_signal("tookDamage",amount)
 	if health <= 0 and !emittedKilled:
 		emit_signal("justgotkilled")
 		emittedKilled = true

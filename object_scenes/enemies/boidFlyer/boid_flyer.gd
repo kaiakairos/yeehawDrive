@@ -162,7 +162,7 @@ func stateNormal(vel:Vector2,delta:float) -> Vector2:
 	return vel
 
 
-func _on_health_component_took_damage() -> void:
+func _on_health_component_took_damage(amount:int) -> void:
 	damageFlash = 0.0
 
 

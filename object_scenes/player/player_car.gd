@@ -51,6 +51,10 @@ var driftVelLengthSave :float = 0.0
 
 var assignedTireTrack :Node2D = null
 
+var lostControlTick :float = 0.0
+var carForceRotate:float = 0.0
+
+
 func _ready() -> void:
 	
 	GlobalReference.player = self
@@ -99,6 +103,26 @@ func _process(delta: float) -> void:
 				driveStateDrift(delta,dot)
 		1: # hopping
 			hoppingState(delta)
+		2: # lost control
+			carForceRotate = 16.0
+			drifting = true
+			if !is_instance_valid(assignedTireTrack):
+				createNewTireTrack()
+			else:
+				updateTireTrack()
+			
+			lostControlTick -= delta
+			if lostControlTick <= 0.0 and carDirection.normalized().dot(velocity.normalized()) > 0.2:
+				state = 0
+				assignedTireTrack = null
+			elif lostControlTick <= 0.0 and velocity.length() < 20:
+				state = 0
+				assignedTireTrack = null
+	
+	
+	carDirection = carDirection.rotated(carForceRotate*delta)
+	carForceRotate = move_toward(carForceRotate,0.0,delta*50.0)
+	
 	
 	velocity = trueVelocity * Vector2(1.0,0.75) # apply velocity changes
 	move_and_slide() # move and shit
@@ -233,10 +257,11 @@ func stackThemSprites() -> void:
 	for child in spriteStackContainer.get_children():
 		
 		child.frame_coords.y = 0
-		if Input.is_action_pressed("turnLeft"):
-			child.frame_coords.y = 1
-		if Input.is_action_pressed("turnRight"):
-			child.frame_coords.y = 2
+		if velocity.length() > 200.0:
+			if Input.is_action_pressed("turnLeft"):
+				child.frame_coords.y = 1
+			if Input.is_action_pressed("turnRight"):
+				child.frame_coords.y = 2
 		
 		child.position.y = -i * 0.4
 		child.rotation =  carDirection.angle()

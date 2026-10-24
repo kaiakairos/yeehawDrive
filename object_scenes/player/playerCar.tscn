@@ -5,6 +5,7 @@
 [ext_resource type="Shader" uid="uid://b113as8ovxkwt" path="res://zeeg/shaders_materials/canvasOutlineWithUV/canvasGroupOutlineWithUV.gdshader" id="2_b61pa"]
 [ext_resource type="Material" uid="uid://dpas1j5aixd1e" path="res://zeeg/shaders_materials/canvasGroupOutline/canvasGroupOutline.tres" id="2_eamtm"]
 [ext_resource type="Texture2D" uid="uid://bcps8mno6b8bl" path="res://object_scenes/player/sprites/flash.png" id="4_eamtm"]
+[ext_resource type="Script" uid="uid://4kpqktoop3t0" path="res://object_scenes/player/playerCamera.gd" id="4_i67wl"]
 [ext_resource type="Material" uid="uid://blthl8litkxca" path="res://zeeg/shaders_materials/worldGridPlaceholder/worldGridPlaceholder.tres" id="4_m5nwo"]
 [ext_resource type="Script" uid="uid://bgqml2m1hmbl2" path="res://object_scenes/player/gun_handler.gd" id="5_dnn2p"]
 [ext_resource type="Script" uid="uid://b2ojjqp0ucgev" path="res://classes/classHealthComponent.gd" id="7_1pw4n"]
@@ -14,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://drjsx6ecthr4y" path="res://object_scenes/player/sprites/windshieldWiper.png" id="11_pui18"]
 [ext_resource type="Texture2D" uid="uid://8yj81ni5ykk5" path="res://object_scenes/player/sprites/brakeLight.png" id="13_k6d32"]
 [ext_resource type="Texture2D" uid="uid://dq8j105nqwnjt" path="res://object_scenes/player/sprites/wheelSpin.png" id="14_kpalf"]
+[ext_resource type="Script" uid="uid://ceonafxkm0wi8" path="res://object_scenes/player/hit_flash.gd" id="15_y8uur"]
 
 [sub_resource type="Curve" id="Curve_rsetr"]
 _limits = [0.0, 0.2, 0.0, 1.0]
@@ -39,6 +41,13 @@ shader_parameter/uvMapTexture = SubResource("ViewportTexture_nct0c")
 
 [sub_resource type="Gradient" id="Gradient_k6d32"]
 colors = PackedColorArray(1, 0.11207495, 0, 1, 1, 0, 0, 1)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_y8uur"]
+blend_mode = 1
+
+[sub_resource type="Gradient" id="Gradient_i67wl"]
+offsets = PackedFloat32Array(0, 0.08789954, 0.18835616, 0.23401827, 0.30251142, 0.3892694, 0.5194064, 0.69292235, 1)
+colors = PackedColorArray(18.892157, 18.892157, 18.892157, 1, 18.892157, 0, 0, 1, 14.361845, 0, 0, 1, 18.892157, 9.323401, 9.323401, 1, 1, 1, 1, 1, 1.8005236, 0, 0, 1, 1.517972, 1.3916658, 1.1683453, 1, 1.200701, 0.7877348, 0.40112868, 1, 0, 0, 0, 1)
 
 [node name="PlayerCar" type="CharacterBody2D" unique_id=1822216303 node_paths=PackedStringArray("spriteStackContainer", "wheelStackContainer", "otherContainer", "camera", "shadow", "debugLineVelocity", "debugLineCarFacingDir", "dbeugLineWheelFacingDir", "label1", "label2", "tireMarker1", "tireMarker2", "tireMarker3", "tireMarker4")]
 script = ExtResource("1_rsetr")
@@ -111,6 +120,7 @@ width = 2.0
 default_color = Color(1, 0, 0, 1)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1409833024]
+script = ExtResource("4_i67wl")
 
 [node name="ColorRect" type="ColorRect" parent="Camera2D" unique_id=355313353]
 z_index = -97
@@ -222,3 +232,14 @@ texture = ExtResource("14_kpalf")
 [node name="wheel4" type="Sprite2D" parent="SubViewport/wheels" unique_id=1581429330]
 position = Vector2(57, 0)
 texture = ExtResource("14_kpalf")
+
+[node name="HitFlash" type="ColorRect" parent="SubViewport" unique_id=1511048865]
+process_mode = 3
+material = SubResource("CanvasItemMaterial_y8uur")
+offset_right = 96.0
+offset_bottom = 96.0
+color = Color(0, 0, 0, 1)
+script = ExtResource("15_y8uur")
+hitflash = SubResource("Gradient_i67wl")
+
+[connection signal="tookDamage" from="HealthComponent" to="SubViewport/HitFlash" method="_on_health_component_took_damage"]
