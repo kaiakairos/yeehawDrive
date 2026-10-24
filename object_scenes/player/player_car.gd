@@ -90,7 +90,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	processWheelDirection(delta)
 	checkforHopInput()
-	
+	$ProgressBars/simpleProgressBar.visible = drifting and state == 0 and driftboost > 10
 	match state:
 		0: # drive
 			turnVehicle()
@@ -102,12 +102,17 @@ func _process(delta: float) -> void:
 					gunHandler.setBulletMode(1)
 				else:
 					gunHandler.setBulletMode(0)
+				
 			else:
 				driveStateDrift(delta,dot)
 				if driftboost > 900:
 					gunHandler.setBulletMode(2)
 				elif driftboost > 250:
 					gunHandler.setBulletMode(1)
+				
+				$ProgressBars/simpleProgressBar.updateValue(driftboost)
+				#$ProgressBars/simpleProgressBar/ColorRect2.position.y = 11.0 + ((1.0-abs(dot)) * -10.0)
+				
 		1: # hopping
 			hoppingState(delta)
 		2: # lost control
@@ -148,7 +153,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("testKey"):
 		$SubViewport.playAnimWindshieldWiper()
 	
-	
+	$ProgressBars/healthbar.modulate.a = move_toward($ProgressBars/healthbar.modulate.a,0.0,delta*4.0)
 
 func applyAcceleration(delta:float) -> void:
 	var target :float = 0.0
@@ -308,3 +313,7 @@ func antennaAnimation() -> void:
 	$SpriteGroup/otherContainer/antenna.add_point(Vector2(0,-13) + (velocity * -0.012))
 	#$SpriteGroup/otherContainer/antenna/emblem.position = Vector2(0,-13) + (velocity * -0.012)
 	#$SpriteGroup/otherContainer/antenna/emblem.rotation = $SpriteGroup/otherContainer/antenna.get_point_position(1).angle_to($SpriteGroup/otherContainer/antenna.get_point_position(2))
+
+
+func _on_health_component_health_updated(health: int, maxHealth: int) -> void:
+	$ProgressBars/healthbar.modulate.a = 10.0

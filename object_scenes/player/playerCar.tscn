@@ -5,6 +5,7 @@
 [ext_resource type="Shader" uid="uid://b113as8ovxkwt" path="res://zeeg/shaders_materials/canvasOutlineWithUV/canvasGroupOutlineWithUV.gdshader" id="2_b61pa"]
 [ext_resource type="Material" uid="uid://dpas1j5aixd1e" path="res://zeeg/shaders_materials/canvasGroupOutline/canvasGroupOutline.tres" id="2_eamtm"]
 [ext_resource type="Texture2D" uid="uid://bcps8mno6b8bl" path="res://object_scenes/player/sprites/flash.png" id="4_eamtm"]
+[ext_resource type="PackedScene" uid="uid://bh2ea7pbxgj5v" path="res://ui_scenes/simpleProgressBar/simple_progress_bar.tscn" id="4_g632t"]
 [ext_resource type="Script" uid="uid://4kpqktoop3t0" path="res://object_scenes/player/playerCamera.gd" id="4_i67wl"]
 [ext_resource type="Material" uid="uid://blthl8litkxca" path="res://zeeg/shaders_materials/worldGridPlaceholder/worldGridPlaceholder.tres" id="4_m5nwo"]
 [ext_resource type="Script" uid="uid://bgqml2m1hmbl2" path="res://object_scenes/player/gun_handler.gd" id="5_dnn2p"]
@@ -73,6 +74,12 @@ tireMarker2 = NodePath("SpriteGroup/otherContainer/Marker2D2")
 tireMarker3 = NodePath("SpriteGroup/otherContainer/Marker2D3")
 tireMarker4 = NodePath("SpriteGroup/otherContainer/Marker2D4")
 
+[node name="HealthComponent" type="Node" parent="." unique_id=180869992]
+script = ExtResource("7_1pw4n")
+defaultMaxHealth = 300
+isPlayer = true
+metadata/_custom_type_script = "uid://b2ojjqp0ucgev"
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=83995325]
 shape = SubResource("CircleShape2D_kytb2")
 
@@ -122,6 +129,44 @@ default_color = Color(0, 1, 0, 1)
 points = PackedVector2Array(100, -1, 0, -1)
 width = 2.0
 default_color = Color(1, 0, 0, 1)
+
+[node name="ProgressBars" type="Node2D" parent="." unique_id=772790919]
+
+[node name="simpleProgressBar" parent="ProgressBars" unique_id=1382119039 instance=ExtResource("4_g632t")]
+position = Vector2(22, -26)
+size = Vector2i(1, 11)
+maxValue = 901.0
+colorDictionary = Dictionary[float, Color]({
+0.0: Color(1, 0.8862745, 0.39215687, 1),
+250.0: Color(1, 0.4, 0.21960784, 1),
+900.0: Color(0.23921569, 0.69411767, 1, 1)
+})
+
+[node name="ColorRect" type="ColorRect" parent="ProgressBars/simpleProgressBar" unique_id=1905104500]
+visible = false
+offset_left = 3.0
+offset_right = 4.0
+offset_bottom = 13.0
+color = Color(0, 0, 0, 1)
+
+[node name="ColorRect2" type="ColorRect" parent="ProgressBars/simpleProgressBar" unique_id=1473209294]
+visible = false
+offset_left = 2.0
+offset_top = 1.0
+offset_right = 3.0
+offset_bottom = 2.0
+color = Color(1, 0, 0, 1)
+
+[node name="healthbar" parent="ProgressBars" unique_id=1415403256 instance=ExtResource("4_g632t")]
+position = Vector2(-10, -34)
+size = Vector2i(20, 1)
+fillMode = 2
+colorDictionary = Dictionary[float, Color]({
+-0.215: Color(1, 0, 0, 1),
+20.0: Color(1, 0.62782896, 0, 1),
+50.0: Color(0.6591482, 1, 0, 1),
+75.0: Color(0, 1, 0.1897483, 1)
+})
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1409833024]
 script = ExtResource("4_i67wl")
@@ -184,12 +229,6 @@ rotation = 0.80798316
 scale = Vector2(3.3100002, 3.3099997)
 texture = ExtResource("4_eamtm")
 hframes = 3
-
-[node name="HealthComponent" type="Node" parent="." unique_id=180869992]
-script = ExtResource("7_1pw4n")
-defaultMaxHealth = 99999
-isPlayer = true
-metadata/_custom_type_script = "uid://b2ojjqp0ucgev"
 
 [node name="Hitbox" type="Node2D" parent="." unique_id=279580874 node_paths=PackedStringArray("healthCompenent", "parentObject")]
 script = ExtResource("8_xgjc2")
@@ -256,4 +295,6 @@ color = Color(0, 0, 0, 1)
 script = ExtResource("15_y8uur")
 hitflash = SubResource("Gradient_i67wl")
 
+[connection signal="healthUpdated" from="HealthComponent" to="." method="_on_health_component_health_updated"]
+[connection signal="healthUpdated" from="HealthComponent" to="ProgressBars/healthbar" method="updateMax"]
 [connection signal="tookDamage" from="HealthComponent" to="SubViewport/HitFlash" method="_on_health_component_took_damage"]
