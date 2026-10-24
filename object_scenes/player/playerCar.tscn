@@ -6,6 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://bcps8mno6b8bl" path="res://object_scenes/player/sprites/flash.png" id="4_eamtm"]
 [ext_resource type="Material" uid="uid://blthl8litkxca" path="res://zeeg/shaders_materials/worldGridPlaceholder/worldGridPlaceholder.tres" id="4_m5nwo"]
 [ext_resource type="Script" uid="uid://bgqml2m1hmbl2" path="res://object_scenes/player/gun_handler.gd" id="5_dnn2p"]
+[ext_resource type="Script" uid="uid://b2ojjqp0ucgev" path="res://classes/classHealthComponent.gd" id="7_1pw4n"]
+[ext_resource type="Script" uid="uid://cfr45d0l135cu" path="res://classes/classHitBox.gd" id="8_xgjc2"]
 
 [sub_resource type="Curve" id="Curve_rsetr"]
 _limits = [0.0, 0.2, 0.0, 1.0]
@@ -118,13 +120,26 @@ scale = Vector2(1, 0.75)
 scale = Vector2(1, 1.3333334)
 
 [node name="Flash" type="Sprite2D" parent="CanvasGroup/effects" unique_id=640637529]
+visible = false
 position = Vector2(-3.5762787e-07, -9)
 rotation = 0.80798316
 scale = Vector2(3.3100002, 3.3099997)
 texture = ExtResource("4_eamtm")
 
 [node name="Flash2" type="Sprite2D" parent="CanvasGroup/effects" unique_id=1927615242]
+visible = false
 position = Vector2(11, -9)
 rotation = 0.80798316
 scale = Vector2(3.3100002, 3.3099997)
 texture = ExtResource("4_eamtm")
+
+[node name="HealthComponent" type="Node" parent="." unique_id=180869992]
+script = ExtResource("7_1pw4n")
+metadata/_custom_type_script = "uid://b2ojjqp0ucgev"
+
+[node name="Hitbox" type="Node2D" parent="." unique_id=279580874 node_paths=PackedStringArray("healthCompenent", "parentObject")]
+script = ExtResource("8_xgjc2")
+healthCompenent = NodePath("../HealthComponent")
+parentObject = NodePath("..")
+radius = 4.0
+metadata/_custom_type_script = "uid://cfr45d0l135cu"

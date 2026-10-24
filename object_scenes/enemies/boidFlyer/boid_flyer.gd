@@ -29,6 +29,9 @@ var waitForDash :float = 0.0
 var heightIntoDashSave :float = 0.0
 var dashRecoveryTimer :float = 0.0
 
+@export var damageFlashGradient :Gradient
+var damageFlash :float = 2.0
+
 func _ready() -> void:
 	
 	if randi() % 2 == 0:
@@ -90,6 +93,9 @@ func _process(delta: float) -> void:
 	$Line2D2.global_position = Vector2.ZERO
 	if $Line2D2.points.size() > 6:
 		$Line2D2.remove_point(0)
+	
+	damageFlash += delta * 4.0
+	modulate = damageFlashGradient.sample( damageFlash )
 
 func stateNormal(vel:Vector2,delta:float) -> Vector2:
 	
@@ -131,3 +137,11 @@ func stateNormal(vel:Vector2,delta:float) -> Vector2:
 		heightIntoDashSave = heightSpriteOrigin.position.y
 	
 	return vel
+
+
+func _on_health_component_took_damage() -> void:
+	damageFlash = 0.0
+
+
+func _on_health_component_justgotkilled() -> void:
+	queue_free()

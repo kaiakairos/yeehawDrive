@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://d2l1km7b1m6ar"]
+
+[ext_resource type="Script" uid="uid://c375qn8rdbqgk" path="res://ui_scenes/damageIndicator/damage_indicator.gd" id="1_xr3du"]
+[ext_resource type="Texture2D" uid="uid://3r5beasjcnhr" path="res://ui_scenes/damageIndicator/font.png" id="2_u32b3"]
+
+[sub_resource type="Curve" id="Curve_xr3du"]
+_limits = [-1.0, 1.6, 0.0, 1.0]
+_data = [Vector2(0, -0.35000014), 0.0, 7.7133574, 0, 0, Vector2(0.25634345, 1.1226559), 0.0, -0.3377209, 0, 0, Vector2(0.672739, -0.7054689), 0.0, 0.0, 0, 0, Vector2(1, 0), -7.2511396, 0.0, 0, 0]
+point_count = 4
+
+[node name="damageIndicator" type="Node2D" unique_id=167245209]
+position = Vector2(45, 40)
+script = ExtResource("1_xr3du")
+displayColor = Color(1, 0, 0, 1)
+displayNumber = 12
+numberCurve = SubResource("Curve_xr3du")
+fontTex = ExtResource("2_u32b3")

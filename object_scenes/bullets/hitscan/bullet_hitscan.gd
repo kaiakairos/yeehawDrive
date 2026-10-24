@@ -4,7 +4,6 @@ extends Node2D
 
 @export var gradient :Gradient
 
-@export var raycast :RayCast2D
 
 @export var shadowLine :Line2D
 @export var bulletLine :Line2D
@@ -17,11 +16,11 @@ var motionVector :Vector2 = Vector2.ZERO
 
 func _ready() -> void:
 	var lineLength :int = 420
-	raycast.force_raycast_update()
-	var collider := raycast.get_collider()
-	if is_instance_valid(collider):
-		pass
-	raycast.enabled = false
+	
+	var guy :Array[Hitbox]= ManagerDamager.attackLineScan(5,global_position,Vector2(1,0).rotated(rotation),lineLength,GlobalReference.player,false)
+	if guy.size() > 0:
+		lineLength = guy[0].global_position.distance_to(global_position)
+	
 	# play animation
 	for i in range(amountOfPoints):
 		shadowLine.add_point( Vector2( (lineLength/float(amountOfPoints)) * i  ,0.0 ) )

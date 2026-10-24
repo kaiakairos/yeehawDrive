@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://cjyixqnvh3xy2" path="res://object_scenes/enemies/boidFlyer/boid_flyer.gd" id="1_e0s1s"]
 [ext_resource type="Texture2D" uid="uid://twslll0tu5pb" path="res://object_scenes/bulletCasing/shadow.png" id="2_f68dx"]
 [ext_resource type="Texture2D" uid="uid://cdnawlxgh2imq" path="res://object_scenes/enemies/boidFlyer/placeholder.png" id="3_alaup"]
+[ext_resource type="Script" uid="uid://b2ojjqp0ucgev" path="res://classes/classHealthComponent.gd" id="4_7lida"]
+[ext_resource type="Script" uid="uid://cfr45d0l135cu" path="res://classes/classHitBox.gd" id="5_usivf"]
 
 [sub_resource type="Curve" id="Curve_alaup"]
 _data = [Vector2(0.42550415, 1), -0.79463464, -0.79463464, 0, 0, Vector2(0.5816525, 0.4648437), -1.3444318, 0.0, 0, 0, Vector2(0.80286264, 0.6210937), 2.7710333, 0.0, 0, 0]
@@ -11,6 +13,10 @@ point_count = 3
 [sub_resource type="Curve" id="Curve_7lida"]
 _data = [Vector2(0, 1), 0.0, -3.8452046, 0, 0, Vector2(0.5003252, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.47089484, 0.0, 0, 0]
 point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_usivf"]
+offsets = PackedFloat32Array(0, 0.09106621, 0.19769445, 0.31296822, 0.41671464, 0.5060518, 1)
+colors = PackedColorArray(18.892157, 18.892157, 18.892157, 1, 1, 1, 1, 1, 0.7470902, 0, 0, 1, 0.9731482, 0.6748467, 0.45775273, 1, 2.9721599, 3.0238714, 3.0512192, 1, 0.9731482, 0.99071157, 0.3765157, 1, 1, 1, 1, 1)
 
 [sub_resource type="Curve" id="Curve_usivf"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -26,6 +32,7 @@ heightSpriteOrigin = NodePath("HeightSpriteOrigin")
 heightMax = 48.0
 normalHeightCurve = SubResource("Curve_alaup")
 dashHeightCurve = SubResource("Curve_7lida")
+damageFlashGradient = SubResource("Gradient_usivf")
 
 [node name="Shadow2" type="Sprite2D" parent="." unique_id=388810015]
 z_index = -5
@@ -43,6 +50,7 @@ width_curve = SubResource("Curve_usivf")
 gradient = SubResource("Gradient_alaup")
 
 [node name="HeightSpriteOrigin" type="Node2D" parent="." unique_id=606557846]
+position = Vector2(0, -7)
 
 [node name="Placeholder" type="Sprite2D" parent="HeightSpriteOrigin" unique_id=927486970]
 modulate = Color(1, 0.46666667, 0, 1)
@@ -50,7 +58,28 @@ position = Vector2(0, -4)
 scale = Vector2(1.725, 1.725)
 texture = ExtResource("3_alaup")
 
+[node name="Placeholder3" type="Sprite2D" parent="HeightSpriteOrigin/Placeholder" unique_id=143770008]
+modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+scale = Vector2(1.16, 1.16)
+texture = ExtResource("3_alaup")
+
 [node name="Placeholder2" type="Sprite2D" parent="HeightSpriteOrigin" unique_id=758763971]
 position = Vector2(0, -4)
 scale = Vector2(0.69, 0.69)
 texture = ExtResource("3_alaup")
+
+[node name="Hitbox" type="Node2D" parent="HeightSpriteOrigin" unique_id=805348421 node_paths=PackedStringArray("healthCompenent", "parentObject")]
+script = ExtResource("5_usivf")
+healthCompenent = NodePath("../../HealthComponent")
+parentObject = NodePath("../..")
+radius = 14.0
+metadata/_custom_type_script = "uid://cfr45d0l135cu"
+
+[node name="HealthComponent" type="Node" parent="." unique_id=210973293]
+script = ExtResource("4_7lida")
+defaultMaxHealth = 50
+metadata/_custom_type_script = "uid://b2ojjqp0ucgev"
+
+[connection signal="justgotkilled" from="HealthComponent" to="." method="_on_health_component_justgotkilled"]
+[connection signal="tookDamage" from="HealthComponent" to="." method="_on_health_component_took_damage"]

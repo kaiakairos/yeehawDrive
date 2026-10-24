@@ -10,15 +10,11 @@ colors = PackedColorArray(1, 1, 1, 1, 0.7372549, 0.7372549, 0.65882355, 0.827451
 _data = [Vector2(0, 0.42166334), 0.0, 1.1178006, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[node name="BulletHitscan" type="Node2D" unique_id=963192860 node_paths=PackedStringArray("raycast", "shadowLine", "bulletLine")]
+[node name="BulletHitscan" type="Node2D" unique_id=963192860 node_paths=PackedStringArray("shadowLine", "bulletLine")]
 script = ExtResource("1_rjwew")
 gradient = SubResource("Gradient_rjwew")
-raycast = NodePath("RayCast2D")
 shadowLine = NodePath("shadowLine")
 bulletLine = NodePath("bulletLine")
-
-[node name="RayCast2D" type="RayCast2D" parent="." unique_id=1362223178]
-target_position = Vector2(256, 0)
 
 [node name="shadowLine" type="Line2D" parent="." unique_id=692163547]
 z_index = -5
