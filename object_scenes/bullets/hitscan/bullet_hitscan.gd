@@ -15,11 +15,13 @@ var waveVector :PackedVector2Array = PackedVector2Array()
 var motionVector :Vector2 = Vector2.ZERO
 
 func _ready() -> void:
-	var lineLength :int = 420
+	var lineLength :float = 420
 	
-	var guy :Array[Hitbox]= ManagerDamager.attackLineScan(5,global_position,Vector2(1,0).rotated(rotation),lineLength,GlobalReference.player,false)
+	var guy :Array[Hitbox]= ManagerDamager.getHitboxOnLine(global_position,Vector2(1,0).rotated(rotation),lineLength,GlobalReference.player,false)
 	if guy.size() > 0:
 		lineLength = guy[0].global_position.distance_to(global_position)
+		guy[0].healthCompenent.recieveKnockback( Vector2(200,0).rotated(rotation) )
+		guy[0].healthCompenent.dealDamage(5)
 	
 	# play animation
 	for i in range(amountOfPoints):

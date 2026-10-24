@@ -31,7 +31,7 @@ func _ready() -> void:
 		spr.frame = ["0","1","2","3","4","5","6","7","8","9","-","?"].find(letter)
 		spr.modulate = displayColor
 		add_child(spr)
-		spr.position.x = i * 7
+		spr.position.x = i * 10
 		
 		i += 1
 		
@@ -43,14 +43,14 @@ func _ready() -> void:
 	smallVelocity = Vector2.ZERO
 	
 func tweenMethod(sample:float,obj:Node) -> void:
-	obj.position.y = numberCurve.sample(sample) * 4
+	obj.position.y = numberCurve.sample(sample) * 8
 
 
 func _process(delta: float) -> void:
-	flashTimer += delta * 20.0
+	flashTimer += delta * 25.0
 	
 	if !done:
-		modulate.a = 0.95 - (sin(flashTimer) * 0.2)
+		modulate.a = 0.7 - (sin(flashTimer) * 0.3)
 		smallVelocity.y += 500 * delta
 	
 	

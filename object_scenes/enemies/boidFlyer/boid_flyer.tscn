@@ -78,8 +78,9 @@ metadata/_custom_type_script = "uid://cfr45d0l135cu"
 
 [node name="HealthComponent" type="Node" parent="." unique_id=210973293]
 script = ExtResource("4_7lida")
-defaultMaxHealth = 50
+defaultMaxHealth = 100933
 metadata/_custom_type_script = "uid://b2ojjqp0ucgev"
 
 [connection signal="justgotkilled" from="HealthComponent" to="." method="_on_health_component_justgotkilled"]
 [connection signal="tookDamage" from="HealthComponent" to="." method="_on_health_component_took_damage"]
+[connection signal="tookKnockback" from="HealthComponent" to="." method="_on_health_component_took_knockback"]

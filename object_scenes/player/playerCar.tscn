@@ -135,6 +135,8 @@ texture = ExtResource("4_eamtm")
 
 [node name="HealthComponent" type="Node" parent="." unique_id=180869992]
 script = ExtResource("7_1pw4n")
+defaultMaxHealth = 99999
+isPlayer = true
 metadata/_custom_type_script = "uid://b2ojjqp0ucgev"
 
 [node name="Hitbox" type="Node2D" parent="." unique_id=279580874 node_paths=PackedStringArray("healthCompenent", "parentObject")]

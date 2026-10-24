@@ -9,9 +9,8 @@ _data = [Vector2(0, -0.35000014), 0.0, 7.7133574, 0, 0, Vector2(0.25634345, 1.12
 point_count = 4
 
 [node name="damageIndicator" type="Node2D" unique_id=167245209]
+z_index = 200
 position = Vector2(45, 40)
 script = ExtResource("1_xr3du")
-displayColor = Color(1, 0, 0, 1)
-displayNumber = 12
 numberCurve = SubResource("Curve_xr3du")
 fontTex = ExtResource("2_u32b3")

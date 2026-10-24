@@ -8,8 +8,7 @@ func getAllHitboxes() -> Array[Hitbox]:
 			poop.append(i)
 	return poop
 
-
-func attackLineScan(damageAmount:int,sourcePosition:Vector2,direction:Vector2,lineRange:int=500,sourceEntity:Node=null,hitmultiple:bool=false) -> Array[Hitbox]:
+func getHitboxOnLine(sourcePosition:Vector2,direction:Vector2,lineRange:float=500,sourceEntity:Node=null,hitmultiple:bool=false) -> Array[Hitbox]:
 	var collidedHitboxes :Array[Hitbox] = []
 	for hitbox in getAllHitboxes():
 		if hitbox.parentObject == sourceEntity:
@@ -23,20 +22,16 @@ func attackLineScan(damageAmount:int,sourcePosition:Vector2,direction:Vector2,li
 		return collidedHitboxes
 	
 	if hitmultiple:
-		for hitbox in collidedHitboxes:
-			hitbox.healthCompenent.dealDamage(damageAmount)
 		return collidedHitboxes
-	
 	
 	var findClosest :Hitbox = collidedHitboxes[0]
 	for hitbox in collidedHitboxes:
 		if hitbox.global_position.distance_to(sourcePosition) < findClosest.global_position.distance_to(sourcePosition):
 			findClosest = hitbox
 	
-	findClosest.healthCompenent.dealDamage(damageAmount)
 	return [findClosest]
 
-func attackRadius(damageAmount:int,sourcePosition:Vector2,damageRadius:float,sourceEntity:Node=null) -> Array[Hitbox]:
+func getHitboxInRadius(sourcePosition:Vector2,damageRadius:float,sourceEntity:Node=null) -> Array[Hitbox]:
 	var collidedHitboxes :Array[Hitbox] = []
 	for hitbox in getAllHitboxes():
 		if hitbox.parentObject == sourceEntity:
@@ -44,9 +39,5 @@ func attackRadius(damageAmount:int,sourcePosition:Vector2,damageRadius:float,sou
 		
 		if sourcePosition.distance_to(hitbox.global_position) < damageRadius + hitbox.radius:
 			collidedHitboxes.append(hitbox)
-	
-	
-	for hitbox in collidedHitboxes:
-		hitbox.healthCompenent.dealDamage(damageAmount)
 	
 	return collidedHitboxes

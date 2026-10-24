@@ -14,10 +14,12 @@ signal tookDamage
 signal justgotkilled
 var emittedKilled :bool = false
 
+signal tookKnockback(amount:Vector2)
+
 @export var isPlayer :bool = false
 
 func _ready() -> void:
-	maxHealth += healthUpgradeLevel 
+	setMaxHealth()
 	health = maxHealth
 
 func setMaxHealth() -> void:
@@ -49,5 +51,5 @@ func dealDamage(amount:int=0) -> void:
 		emit_signal("justgotkilled")
 		emittedKilled = true
 	
-	
-	
+func recieveKnockback(vel:Vector2) -> void:
+	emit_signal("tookKnockback",vel)
