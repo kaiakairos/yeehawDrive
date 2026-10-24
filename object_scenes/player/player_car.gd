@@ -13,6 +13,7 @@ extends CharacterBody2D
 @export var hopAnimationCurve :Curve
 @export_group("Nodes")
 @export var spriteStackContainer :Node2D
+@export var wheelStackContainer :Node2D
 @export var otherContainer :Node2D
 @export var camera :Camera2D
 @export_subgroup("Effects")
@@ -57,13 +58,25 @@ func _ready() -> void:
 	
 	
 	# generate sprite sheet automatically
-	var frameTotal :int = 20
+	var frameTotal :int = 15
 	for i in range(frameTotal):
-		var spr :Sprite2D = Sprite2D.new()
-		spr.texture = load("res://object_scenes/player/sprites/greenSquare.png")
-		spr.hframes = frameTotal
-		spr.frame = i
-		spriteStackContainer.add_child(spr)
+		for layerUp in range(2):
+			var spr :Sprite2D = Sprite2D.new()
+			spr.texture = load("res://object_scenes/player/sprites/greenSquare.png")
+			spr.hframes = frameTotal
+			spr.vframes = 3
+			spr.frame_coords.x = frameTotal - i - 1
+			spriteStackContainer.add_child(spr)
+	
+	var wheelFrameTotal :int = 5
+	for i in range(wheelFrameTotal):
+		for layerUp in range(2):
+			var spr :Sprite2D = Sprite2D.new()
+			spr.texture = load("res://object_scenes/player/sprites/wheelStack.png")
+			spr.hframes = wheelFrameTotal
+			spr.vframes = 3
+			spr.frame_coords.x = wheelFrameTotal - i - 1
+			wheelStackContainer.add_child(spr)
 	
 	debugLineVelocity.visible = showDebugLines
 	debugLineCarFacingDir.visible = showDebugLines
@@ -72,6 +85,8 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	processWheelDirection(delta)
 	checkforHopInput()
+	
+	
 	
 	match state:
 		0: # drive
@@ -96,6 +111,13 @@ func _process(delta: float) -> void:
 	if showDebugLines:
 		updateDebugLines()
 	updateDebugLabels()
+	
+	antennaAnimation()
+	
+	if Input.is_action_just_pressed("testKey"):
+		$SubViewport.playAnimWindshieldWiper()
+	
+	
 
 func applyAcceleration(delta:float) -> void:
 	var target :float = 0.0
@@ -163,6 +185,7 @@ func hoppingState(delta:float) -> void: # hopping behavior
 		driftVelLengthSave = trueVelocity.length()
 	var hopSample :float = hopAnimationCurve.sample( hopTimer/hopTimeAmount)
 	spriteStackContainer.position.y = hopSample * -8.0
+	wheelStackContainer.position.y = spriteStackContainer.position.y
 	var erm :float = 1.0 - (hopSample*0.25)
 	shadow.scale = Vector2(erm,erm)
 
@@ -208,7 +231,25 @@ func placeCamera() -> void:
 func stackThemSprites() -> void:
 	var i :int = 0
 	for child in spriteStackContainer.get_children():
-		child.position.y = -i * 0.5
+		
+		child.frame_coords.y = 0
+		if Input.is_action_pressed("turnLeft"):
+			child.frame_coords.y = 1
+		if Input.is_action_pressed("turnRight"):
+			child.frame_coords.y = 2
+		
+		child.position.y = -i * 0.4
+		child.rotation =  carDirection.angle()
+		i += 1
+	
+	i=0
+	for child in wheelStackContainer.get_children():
+		child.frame_coords.y = 0
+		if Input.is_action_pressed("turnLeft"):
+			child.frame_coords.y = 1
+		if Input.is_action_pressed("turnRight"):
+			child.frame_coords.y = 2
+		child.position.y = -i * 0.4
 		child.rotation =  carDirection.angle()
 		i += 1
 
@@ -226,4 +267,10 @@ func updateTireTrack() -> void: # updates tire tracks
 func predictFuturePosition(time:float) -> Vector2:
 	return global_position + (time * velocity)
 	
-	
+func antennaAnimation() -> void:
+	$SpriteGroup/otherContainer/antenna.position = Vector2(-13,-6.66) + spriteStackContainer.position.rotated(-otherContainer.rotation)
+	$SpriteGroup/otherContainer/antenna.rotation = -otherContainer.rotation
+	$SpriteGroup/otherContainer/antenna.clear_points()
+	$SpriteGroup/otherContainer/antenna.add_point(Vector2(0,-6))
+	$SpriteGroup/otherContainer/antenna.add_point(Vector2(0,-10) + (velocity * -0.005))
+	$SpriteGroup/otherContainer/antenna.add_point(Vector2(0,-13) + (velocity * -0.012))

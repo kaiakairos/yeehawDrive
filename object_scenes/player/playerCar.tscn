@@ -2,12 +2,18 @@
 
 [ext_resource type="Script" uid="uid://nw2nemsknabv" path="res://object_scenes/player/player_car.gd" id="1_rsetr"]
 [ext_resource type="Texture2D" uid="uid://b1a3ff0tffs74" path="res://object_scenes/player/sprites/shadow.png" id="2_2mpte"]
+[ext_resource type="Shader" uid="uid://b113as8ovxkwt" path="res://zeeg/shaders_materials/canvasOutlineWithUV/canvasGroupOutlineWithUV.gdshader" id="2_b61pa"]
 [ext_resource type="Material" uid="uid://dpas1j5aixd1e" path="res://zeeg/shaders_materials/canvasGroupOutline/canvasGroupOutline.tres" id="2_eamtm"]
 [ext_resource type="Texture2D" uid="uid://bcps8mno6b8bl" path="res://object_scenes/player/sprites/flash.png" id="4_eamtm"]
 [ext_resource type="Material" uid="uid://blthl8litkxca" path="res://zeeg/shaders_materials/worldGridPlaceholder/worldGridPlaceholder.tres" id="4_m5nwo"]
 [ext_resource type="Script" uid="uid://bgqml2m1hmbl2" path="res://object_scenes/player/gun_handler.gd" id="5_dnn2p"]
 [ext_resource type="Script" uid="uid://b2ojjqp0ucgev" path="res://classes/classHealthComponent.gd" id="7_1pw4n"]
 [ext_resource type="Script" uid="uid://cfr45d0l135cu" path="res://classes/classHitBox.gd" id="8_xgjc2"]
+[ext_resource type="Script" uid="uid://c7efii8nfqvaj" path="res://object_scenes/player/skinAnimations.gd" id="10_gse8d"]
+[ext_resource type="Texture2D" uid="uid://dl1h61jds03td" path="res://object_scenes/player/sprites/test.png" id="10_pui18"]
+[ext_resource type="Texture2D" uid="uid://drjsx6ecthr4y" path="res://object_scenes/player/sprites/windshieldWiper.png" id="11_pui18"]
+[ext_resource type="Texture2D" uid="uid://8yj81ni5ykk5" path="res://object_scenes/player/sprites/brakeLight.png" id="13_k6d32"]
+[ext_resource type="Texture2D" uid="uid://dq8j105nqwnjt" path="res://object_scenes/player/sprites/wheelSpin.png" id="14_kpalf"]
 
 [sub_resource type="Curve" id="Curve_rsetr"]
 _limits = [0.0, 0.2, 0.0, 1.0]
@@ -21,14 +27,29 @@ point_count = 5
 [sub_resource type="CircleShape2D" id="CircleShape2D_kytb2"]
 radius = 6.0827627
 
-[node name="PlayerCar" type="CharacterBody2D" unique_id=1822216303 node_paths=PackedStringArray("spriteStackContainer", "otherContainer", "camera", "shadow", "debugLineVelocity", "debugLineCarFacingDir", "dbeugLineWheelFacingDir", "label1", "label2", "tireMarker1", "tireMarker2", "tireMarker3", "tireMarker4")]
+[sub_resource type="ViewportTexture" id="ViewportTexture_nct0c"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gse8d"]
+resource_local_to_scene = true
+shader = ExtResource("2_b61pa")
+shader_parameter/line_colour = Color(0, 0, 0, 1)
+shader_parameter/line_thickness = 1
+shader_parameter/uvMapTexture = SubResource("ViewportTexture_nct0c")
+
+[sub_resource type="Gradient" id="Gradient_k6d32"]
+colors = PackedColorArray(1, 0.11207495, 0, 1, 1, 0, 0, 1)
+
+[node name="PlayerCar" type="CharacterBody2D" unique_id=1822216303 node_paths=PackedStringArray("spriteStackContainer", "wheelStackContainer", "otherContainer", "camera", "shadow", "debugLineVelocity", "debugLineCarFacingDir", "dbeugLineWheelFacingDir", "label1", "label2", "tireMarker1", "tireMarker2", "tireMarker3", "tireMarker4")]
 script = ExtResource("1_rsetr")
 turnStrengthCurve = SubResource("Curve_rsetr")
 hopAnimationCurve = SubResource("Curve_2mpte")
 spriteStackContainer = NodePath("SpriteGroup/spriteContainer")
+wheelStackContainer = NodePath("SpriteGroup/wheelContainer")
 otherContainer = NodePath("SpriteGroup/otherContainer")
 camera = NodePath("Camera2D")
 shadow = NodePath("SpriteGroup/otherContainer/Shadow")
+showDebugLines = false
 debugLineVelocity = NodePath("SpriteGroup/actualVel")
 debugLineCarFacingDir = NodePath("SpriteGroup/carFacing")
 dbeugLineWheelFacingDir = NodePath("SpriteGroup/wheelMotion")
@@ -43,8 +64,10 @@ tireMarker4 = NodePath("SpriteGroup/otherContainer/Marker2D4")
 shape = SubResource("CircleShape2D_kytb2")
 
 [node name="SpriteGroup" type="CanvasGroup" parent="." unique_id=1294703876]
-material = ExtResource("2_eamtm")
+material = SubResource("ShaderMaterial_gse8d")
 scale = Vector2(1, 0.75)
+
+[node name="wheelContainer" type="Node2D" parent="SpriteGroup" unique_id=599864906]
 
 [node name="spriteContainer" type="Node2D" parent="SpriteGroup" unique_id=147573893]
 
@@ -65,6 +88,12 @@ position = Vector2(-9, -6.666667)
 [node name="Shadow" type="Sprite2D" parent="SpriteGroup/otherContainer" unique_id=182853938]
 z_index = -2
 texture = ExtResource("2_2mpte")
+
+[node name="antenna" type="Line2D" parent="SpriteGroup/otherContainer" unique_id=49907009]
+position = Vector2(-13, -6.666667)
+points = PackedVector2Array(0, -10.666667, 0, -29.333336)
+width = 1.0
+gradient = SubResource("Gradient_k6d32")
 
 [node name="actualVel" type="Line2D" parent="SpriteGroup" unique_id=1269617731]
 points = PackedVector2Array(100, -1, 0, -1)
@@ -145,3 +174,51 @@ healthCompenent = NodePath("../HealthComponent")
 parentObject = NodePath("..")
 radius = 4.0
 metadata/_custom_type_script = "uid://cfr45d0l135cu"
+
+[node name="SubViewport" type="SubViewport" parent="." unique_id=44131190 node_paths=PackedStringArray("parent")]
+canvas_item_default_texture_filter = 0
+size = Vector2i(96, 96)
+script = ExtResource("10_gse8d")
+parent = NodePath("..")
+
+[node name="Test" type="Sprite2D" parent="SubViewport" unique_id=1453832377]
+texture = ExtResource("10_pui18")
+centered = false
+
+[node name="Windshield" type="Node2D" parent="SubViewport" unique_id=1608268005]
+position = Vector2(40, 33)
+
+[node name="Sprite2D" type="Sprite2D" parent="SubViewport/Windshield" unique_id=277480465]
+scale = Vector2(1, 0.75)
+texture = ExtResource("11_pui18")
+centered = false
+offset = Vector2(-2, -1)
+
+[node name="Flash" type="Sprite2D" parent="SubViewport" unique_id=1267108873]
+modulate = Color(1, 1, 1, 0)
+position = Vector2(40.82, 22.36)
+scale = Vector2(3.08, 3.08)
+texture = ExtResource("4_eamtm")
+
+[node name="brakeLight" type="Sprite2D" parent="SubViewport" unique_id=15831787]
+visible = false
+position = Vector2(40, 11)
+texture = ExtResource("13_k6d32")
+
+[node name="wheels" type="Node2D" parent="SubViewport" unique_id=347533237]
+position = Vector2(11.5, 60.5)
+
+[node name="wheel1" type="Sprite2D" parent="SubViewport/wheels" unique_id=1006613781]
+texture = ExtResource("14_kpalf")
+
+[node name="wheel2" type="Sprite2D" parent="SubViewport/wheels" unique_id=1334613736]
+position = Vector2(16, 0)
+texture = ExtResource("14_kpalf")
+
+[node name="wheel3" type="Sprite2D" parent="SubViewport/wheels" unique_id=528135101]
+position = Vector2(41, 0)
+texture = ExtResource("14_kpalf")
+
+[node name="wheel4" type="Sprite2D" parent="SubViewport/wheels" unique_id=1581429330]
+position = Vector2(57, 0)
+texture = ExtResource("14_kpalf")

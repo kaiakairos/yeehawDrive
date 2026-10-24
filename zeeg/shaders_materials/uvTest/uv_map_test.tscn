@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://3bmewobdnwco"]
+
+[ext_resource type="Shader" uid="uid://b101ybl8ekx1q" path="res://zeeg/shaders_materials/uvTest/uv_map_test.gdshader" id="1_mhgwf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kytb2"]
+shader = ExtResource("1_mhgwf")
+
+[node name="UVMapTest" type="Node2D" unique_id=2019866923]
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1657598507]
+material = SubResource("ShaderMaterial_kytb2")
+offset_left = 40.0
+offset_top = 38.0
+offset_right = 136.0
+offset_bottom = 134.0

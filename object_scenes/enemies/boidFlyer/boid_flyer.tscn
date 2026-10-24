@@ -73,7 +73,7 @@ texture = ExtResource("3_alaup")
 script = ExtResource("5_usivf")
 healthCompenent = NodePath("../../HealthComponent")
 parentObject = NodePath("../..")
-radius = 14.0
+radius = 18.0
 metadata/_custom_type_script = "uid://cfr45d0l135cu"
 
 [node name="HealthComponent" type="Node" parent="." unique_id=210973293]

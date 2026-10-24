@@ -22,6 +22,7 @@ func _process(delta: float) -> void:
 		summonBullet()
 		timer = delay
 
+	$"../SubViewport/Flash".modulate.a = move_toward($"../SubViewport/Flash".modulate.a,0.0,delta * 4.0)
 
 func summonBullet()-> void:
 	var obj :BulletHitscan = load("res://object_scenes/bullets/hitscan/bullet_hitscan.tscn").instantiate()
@@ -54,6 +55,9 @@ func blastEffect()-> void:
 	flashSprite2.rotation = randf_range(-PI,PI)
 	
 	flashSprite2.position = flashSprite1.position + (get_local_mouse_position().normalized() * 12)
+	
+	$"../SubViewport/Flash".modulate.a = 0.5
+	$"../SubViewport/Flash".rotation = randf()
 	
 	await get_tree().process_frame
 	flashSprite2.scale = Vector2(1.5,1.5)
