@@ -11,9 +11,17 @@ extends Node2D
 
 var timer :float = 0.0
 
+var BULLETMODE :int = 0 # 0: NORMAL, 1: FIRED UP, 2: VEGETA COOL BLUE
+
+func setBulletMode(mode:int) -> void:
+	if BULLETMODE == mode:
+		return # don't switch to mode we already are 
+	BULLETMODE = mode
+	
+
 func _process(delta: float) -> void:
 	timer -= delta
-	
+	#BULLETMODE = 2
 	if Input.is_action_just_pressed("shoot"):
 		summonBullet()
 		timer = delay
@@ -29,6 +37,7 @@ func summonBullet()-> void:
 	obj.global_position = global_position
 	obj.rotation = get_local_mouse_position().angle() + randf_range(-accuracy,accuracy)
 	obj.motionVector = player.velocity * 0.5
+	obj.type = BULLETMODE
 	player.get_parent().add_child(obj)
 	blastEffect()
 	

@@ -4,7 +4,6 @@ extends Node2D
 
 @export var gradient :Gradient
 
-
 @export var shadowLine :Line2D
 @export var bulletLine :Line2D
 
@@ -14,14 +13,24 @@ var waveVector :PackedVector2Array = PackedVector2Array()
 
 var motionVector :Vector2 = Vector2.ZERO
 
+var type:int = 0 # 0: normal, 1: boosted, 2: super boosted
+
 func _ready() -> void:
+	
+	if type == 1:
+		bulletLine.texture = load("res://object_scenes/bullets/hitscan/boost.png")
+		bulletLine.width = 8.0
+	elif type == 2:
+		bulletLine.texture = load("res://object_scenes/bullets/hitscan/boost2.png")
+		bulletLine.width = 16.0
+	
 	var lineLength :float = 420
 	
 	var guy :Array[Hitbox]= ManagerDamager.getHitboxOnLine(global_position,Vector2(1,0).rotated(rotation),lineLength,GlobalReference.player,false)
 	if guy.size() > 0:
 		lineLength = guy[0].global_position.distance_to(global_position)
 		guy[0].healthCompenent.recieveKnockback( Vector2(200,0).rotated(rotation) )
-		guy[0].healthCompenent.dealDamage(5)
+		guy[0].healthCompenent.dealDamage(5 * (type+1))
 	
 	# play animation
 	for i in range(amountOfPoints):
@@ -29,12 +38,18 @@ func _ready() -> void:
 		waveVector.append( Vector2(randf_range(-2.0,2.0),randf_range(-2.0,2.0)) )
 		
 	
+	
 	bulletLine.points = shadowLine.points
 	bulletLine.position = Vector2(0,-8.0).rotated(-rotation) * Vector2(1,0.75)
 	
 	bulletLine.default_color = gradient.sample(0.0)
 	
 	motionVector += Vector2(100,0).rotated(rotation)
+	
+	
+	if type == 2:
+		for i in range(7):
+			applyWind()
 	
 	await get_tree().process_frame
 	

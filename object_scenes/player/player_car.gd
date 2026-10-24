@@ -16,6 +16,8 @@ extends CharacterBody2D
 @export var wheelStackContainer :Node2D
 @export var otherContainer :Node2D
 @export var camera :Camera2D
+@export_subgroup("Scripts")
+@export var gunHandler :PlayerGunHandler
 @export_subgroup("Effects")
 @export var shadow :Sprite2D
 @export_subgroup("Debug Lines")
@@ -96,8 +98,16 @@ func _process(delta: float) -> void:
 			var dot :float = carDirection.normalized().dot(trueVelocity.normalized())
 			if dot > tractionLimitDot or currentSpeed < 20:
 				driveStateNormal(delta)
+				if currentSpeed > 700:
+					gunHandler.setBulletMode(1)
+				else:
+					gunHandler.setBulletMode(0)
 			else:
 				driveStateDrift(delta,dot)
+				if driftboost > 500:
+					gunHandler.setBulletMode(2)
+				elif driftboost > 250:
+					gunHandler.setBulletMode(1)
 		1: # hopping
 			hoppingState(delta)
 		2: # lost control

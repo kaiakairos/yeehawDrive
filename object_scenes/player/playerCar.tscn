@@ -49,7 +49,7 @@ blend_mode = 1
 offsets = PackedFloat32Array(0, 0.08789954, 0.18835616, 0.23401827, 0.30251142, 0.3892694, 0.5194064, 0.69292235, 1)
 colors = PackedColorArray(18.892157, 18.892157, 18.892157, 1, 18.892157, 0, 0, 1, 14.361845, 0, 0, 1, 18.892157, 9.323401, 9.323401, 1, 1, 1, 1, 1, 1.8005236, 0, 0, 1, 1.517972, 1.3916658, 1.1683453, 1, 1.200701, 0.7877348, 0.40112868, 1, 0, 0, 0, 1)
 
-[node name="PlayerCar" type="CharacterBody2D" unique_id=1822216303 node_paths=PackedStringArray("spriteStackContainer", "wheelStackContainer", "otherContainer", "camera", "shadow", "debugLineVelocity", "debugLineCarFacingDir", "dbeugLineWheelFacingDir", "label1", "label2", "tireMarker1", "tireMarker2", "tireMarker3", "tireMarker4")]
+[node name="PlayerCar" type="CharacterBody2D" unique_id=1822216303 node_paths=PackedStringArray("spriteStackContainer", "wheelStackContainer", "otherContainer", "camera", "gunHandler", "shadow", "debugLineVelocity", "debugLineCarFacingDir", "dbeugLineWheelFacingDir", "label1", "label2", "tireMarker1", "tireMarker2", "tireMarker3", "tireMarker4")]
 script = ExtResource("1_rsetr")
 turnStrengthCurve = SubResource("Curve_rsetr")
 hopAnimationCurve = SubResource("Curve_2mpte")
@@ -57,6 +57,7 @@ spriteStackContainer = NodePath("SpriteGroup/spriteContainer")
 wheelStackContainer = NodePath("SpriteGroup/wheelContainer")
 otherContainer = NodePath("SpriteGroup/otherContainer")
 camera = NodePath("Camera2D")
+gunHandler = NodePath("GunHandler")
 shadow = NodePath("SpriteGroup/otherContainer/Shadow")
 showDebugLines = false
 debugLineVelocity = NodePath("SpriteGroup/actualVel")

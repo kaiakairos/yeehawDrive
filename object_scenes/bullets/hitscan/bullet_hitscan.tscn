@@ -28,3 +28,4 @@ width = 4.0
 width_curve = SubResource("Curve_rjwew")
 texture = ExtResource("2_yhqt4")
 texture_mode = 2
+end_cap_mode = 2
