@@ -104,7 +104,7 @@ func _process(delta: float) -> void:
 					gunHandler.setBulletMode(0)
 			else:
 				driveStateDrift(delta,dot)
-				if driftboost > 500:
+				if driftboost > 620:
 					gunHandler.setBulletMode(2)
 				elif driftboost > 250:
 					gunHandler.setBulletMode(1)
