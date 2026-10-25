@@ -41,7 +41,7 @@ func _process(delta: float) -> void:
 			vely += 700.0 * delta # add bouncing
 			
 			position += velocity * delta
-			velocity = velocity.move_toward(Vector2.ZERO,delta*20.0)
+			#velocity = velocity.move_toward(Vector2.ZERO,delta*20.0)
 			if nodeToHeightAdjust.position.y > 0.0:
 				nodeToHeightAdjust.position.y = 0.0
 				state = 1

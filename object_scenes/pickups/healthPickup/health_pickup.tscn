@@ -23,7 +23,7 @@ radius = 8.0
 
 [node name="HealthPickup" type="Node2D" unique_id=1088978428 node_paths=PackedStringArray("area", "nodeToHeightAdjust", "shadow", "trailLine")]
 script = ExtResource("1_tjuep")
-amount = 2
+amount = 4
 area = NodePath("Area2D")
 nodeToHeightAdjust = NodePath("HeightOrigin")
 shadow = NodePath("Shadow")
