@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://bd7u8gcbsq7yv" path="res://icon.svg" id="4_gg5kx"]
 [ext_resource type="Texture2D" uid="uid://ceslsi3o8w7p5" path="res://world_scenes/test/sand.png" id="4_pek5h"]
 [ext_resource type="PackedScene" uid="uid://clioghtldn7s2" path="res://object_scenes/enemies/boidFlyer/boid_flyer.tscn" id="6_sgdyf"]
+[ext_resource type="PackedScene" uid="uid://7lg081jip8q" path="res://object_scenes/pickups/healthPickup/health_pickup.tscn" id="7_u4rqo"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_35rhc"]
 shader = ExtResource("3_pek5h")
@@ -138,3 +139,12 @@ position = Vector2(-323, 29)
 
 [node name="BoidFlyer5" parent="." unique_id=1700235740 instance=ExtResource("6_sgdyf")]
 position = Vector2(-327, 31)
+
+[node name="HealthPickup" parent="." unique_id=1088978428 instance=ExtResource("7_u4rqo")]
+position = Vector2(-71, 433)
+
+[node name="HealthPickup2" parent="." unique_id=670201835 instance=ExtResource("7_u4rqo")]
+position = Vector2(-4, 536)
+
+[node name="HealthPickup3" parent="." unique_id=2003844893 instance=ExtResource("7_u4rqo")]
+position = Vector2(155, 479)
