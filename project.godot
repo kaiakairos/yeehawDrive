@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="yeehawDrive"
-run/main_scene="uid://ioga8i1ygycu"
+run/main_scene="uid://b2troqmejf1v7"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 run/max_fps=60
 config/icon="res://icon.svg"

@@ -27,7 +27,6 @@ var tick :float = 0.0
 
 func _ready() -> void:
 	vely = -250.0
-	velocity = Vector2(60,60)
 	shadow.z_index = -5
 	area.monitoring = false
 	area.collision_layer = 16
@@ -108,6 +107,10 @@ func additionalProcess(delta:float) -> void:
 func getPickedUp() -> void:
 	state = 2
 	vely = -300.0
+	if GlobalReference.player.driftboost > 20.0:
+		amount *= 2
 
 func giveReward() -> void:
-	pass
+	match pickupType:
+		0: # health
+			GlobalReference.playerHealthComponent.heal(amount)

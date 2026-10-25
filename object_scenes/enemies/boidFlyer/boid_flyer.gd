@@ -79,7 +79,7 @@ func _process(delta: float) -> void:
 				for hitbox in response:
 					if hitbox.parentObject == GlobalReference.player:
 						
-						hitbox.healthCompenent.dealDamage(5)
+						hitbox.healthCompenent.dealDamage(10)
 						hitPlayerInThisDash = true
 		
 		states.DASHRECOVER:
@@ -168,6 +168,11 @@ func _on_health_component_took_damage(amount:int) -> void:
 
 func _on_health_component_justgotkilled() -> void:
 	queue_free()
+	for i in range((randi() % 2) + 1):
+		var obj = load("res://object_scenes/pickups/healthPickup/health_pickup.tscn").instantiate()
+		obj.global_position = global_position
+		obj.velocity = velocity.rotated(randf_range(-0.1,0.1)) * randf_range(0.9,1.1)
+		get_parent().add_child(obj)
 
 
 func _on_health_component_took_knockback(amount: Vector2) -> void:

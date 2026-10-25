@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://b2troqmejf1v7"]
+
+[ext_resource type="PackedScene" uid="uid://b3fnthab616xg" path="res://object_scenes/player/playerCar.tscn" id="1_i650g"]
+[ext_resource type="Script" uid="uid://b85gtocsph76p" path="res://world_scenes/test/test_enemy_spawning.gd" id="1_msgng"]
+
+[node name="TestEnemySpawning" type="Node2D" unique_id=1036910431]
+y_sort_enabled = true
+script = ExtResource("1_msgng")
+
+[node name="PlayerCar" parent="." unique_id=1822216303 instance=ExtResource("1_i650g")]

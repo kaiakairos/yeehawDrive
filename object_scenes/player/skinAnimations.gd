@@ -10,7 +10,12 @@ func _process(delta: float) -> void:
 	
 	$wheels/wheel3.rotate(parent.velocity.length() * delta * 0.06)
 	$wheels/wheel4.rotate(parent.velocity.length() * delta * 0.06)
-
+	
+	
+	$HealEffect.scale = $HealEffect.scale.move_toward(Vector2(19,19),delta*60.0)
+	$HealFlash.color.a = move_toward($HealFlash.color.a,0.0,delta*4.0)
+	
+	
 var playingWindshieldWiper :bool = false
 func playAnimWindshieldWiper() -> void:
 	if playingWindshieldWiper:
@@ -32,3 +37,8 @@ func playAnimWindshieldWiper() -> void:
 		await tweenBack.finished
 	
 	playingWindshieldWiper = false
+
+
+func _on_health_component_healed(amount: int) -> void:
+	$HealEffect.scale = Vector2.ZERO
+	$HealFlash.color.a = 1.0
