@@ -178,4 +178,5 @@ func _on_health_component_justgotkilled() -> void:
 func _on_health_component_took_knockback(amount: Vector2) -> void:
 	velocity += amount
 	knockbackRecoveryTimer = 0.3
-	state = states.KNOCKBACK
+	if state != states.DASH:
+		state = states.KNOCKBACK
