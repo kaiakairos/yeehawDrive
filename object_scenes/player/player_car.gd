@@ -56,6 +56,9 @@ var assignedTireTrack :Node2D = null
 var lostControlTick :float = 0.0
 var carForceRotate:float = 0.0
 
+
+var engineNoise :FastNoiseLite = FastNoiseLite.new()
+
 func _ready() -> void:
 	
 	GlobalReference.player = self
@@ -154,6 +157,32 @@ func _process(delta: float) -> void:
 		$SubViewport.playAnimWindshieldWiper()
 	
 	$ProgressBars/healthbar.modulate.a = move_toward($ProgressBars/healthbar.modulate.a,0.0,delta*4.0)
+	
+	
+	if !drifting:
+		$Sounds/Drift.volume_linear = lerp($Sounds/Drift.volume_linear,0.0,0.4)
+	else:
+		var target :float = velocity.length() / 5200.0
+		
+		target = clamp(target,0.0,0.1)
+		print(target)
+		$Sounds/Drift.pitch_scale = 0.88 - (target*2.0)
+		$Sounds/Drift.volume_linear = lerp($Sounds/Drift.volume_linear,target,0.25) 
+	
+	$Sounds/Engine.volume_linear = clamp(currentSpeed/400.0,0.2,0.8)
+	$Sounds/Engine.pitch_scale = clamp(currentSpeed / maxSpeed,0.52,0.9) + 0.1 + ((engineNoise.get_noise_1d(Time.get_ticks_msec()*0.1*currentSpeed/400.0))*0.1)
+	
+	if Input.is_action_just_pressed("accelerate") and currentSpeed < maxSpeed:
+		match randi() % 3:
+			0: 
+				$Sounds/EngineBoost1.volume_linear = (maxSpeed - currentSpeed ) / maxSpeed
+				$Sounds/EngineBoost1.play()
+			1: 
+				$Sounds/EngineBoost2.volume_linear = (maxSpeed - currentSpeed )/ maxSpeed
+				$Sounds/EngineBoost2.play()
+			2: 
+				$Sounds/EngineBoost3.volume_linear = (maxSpeed - currentSpeed )/ maxSpeed
+				$Sounds/EngineBoost3.play()
 
 func applyAcceleration(delta:float) -> void:
 	var target :float = 0.0

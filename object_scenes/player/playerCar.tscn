@@ -19,6 +19,11 @@
 [ext_resource type="Script" uid="uid://ceonafxkm0wi8" path="res://object_scenes/player/hit_flash.gd" id="15_y8uur"]
 [ext_resource type="Texture2D" uid="uid://cgj4lvvw5dj4q" path="res://object_scenes/player/sprites/healEffect.png" id="18_5e2l8"]
 [ext_resource type="Script" uid="uid://b7m0ae0gibbw0" path="res://object_scenes/player/pickup_box.gd" id="18_smrv5"]
+[ext_resource type="AudioStream" uid="uid://cfoe54niwcqny" path="res://sound/player/skid.wav" id="20_4p7or"]
+[ext_resource type="AudioStream" uid="uid://c8fsn8vgf7lro" path="res://sound/player/engine2.ogg" id="21_bxyhj"]
+[ext_resource type="AudioStream" uid="uid://bpn8jjucqhgds" path="res://sound/player/engineBoost1.ogg" id="22_cg0dk"]
+[ext_resource type="AudioStream" uid="uid://bbhgd60u4ehjv" path="res://sound/player/engineBoost2.ogg" id="23_75tvc"]
+[ext_resource type="AudioStream" uid="uid://b3m8g0yq4jxlb" path="res://sound/player/engineBoost3.ogg" id="24_gfbpy"]
 
 [sub_resource type="Curve" id="Curve_rsetr"]
 _limits = [0.0, 0.2, 0.0, 1.0]
@@ -317,6 +322,28 @@ script = ExtResource("18_smrv5")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PickupBox" unique_id=1210781274]
 shape = SubResource("CircleShape2D_4h0gv")
+
+[node name="Sounds" type="Node2D" parent="." unique_id=525016279]
+process_mode = 3
+
+[node name="Drift" type="AudioStreamPlayer2D" parent="Sounds" unique_id=718548375]
+stream = ExtResource("20_4p7or")
+volume_db = -80.0
+autoplay = true
+
+[node name="Engine" type="AudioStreamPlayer2D" parent="Sounds" unique_id=416736893]
+stream = ExtResource("21_bxyhj")
+volume_db = -8.887
+autoplay = true
+
+[node name="EngineBoost1" type="AudioStreamPlayer2D" parent="Sounds" unique_id=2099455307]
+stream = ExtResource("22_cg0dk")
+
+[node name="EngineBoost2" type="AudioStreamPlayer2D" parent="Sounds" unique_id=1750908785]
+stream = ExtResource("23_75tvc")
+
+[node name="EngineBoost3" type="AudioStreamPlayer2D" parent="Sounds" unique_id=1796357172]
+stream = ExtResource("24_gfbpy")
 
 [connection signal="healed" from="HealthComponent" to="SubViewport" method="_on_health_component_healed"]
 [connection signal="healthUpdated" from="HealthComponent" to="." method="_on_health_component_health_updated"]

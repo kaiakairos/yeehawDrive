@@ -44,6 +44,7 @@ func summonBullet()-> void:
 	blastEffect()
 	
 	createCasing()
+	playBulletSound()
 
 func createCasing() -> void:
 	var obj :BulletCasing = load("res://object_scenes/bulletCasing/bullet_casing.tscn").instantiate()
@@ -88,3 +89,6 @@ func resetTimer() -> void:
 		0: timer = delay
 		1: timer = delayBoost
 		2: timer = delayBoost2
+
+func playBulletSound() -> void:
+	pass
