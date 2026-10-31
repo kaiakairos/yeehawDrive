@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bwm1jlcth4nvr"
+path="res://.godot/imported/HandGun GUNS01_07_3.wav-b9882d54fad1a8410230355d9ecb3752.sample"
+
+[deps]
+
+source_file="res://sound/player/gunshots/HandGun GUNS01_07_3.wav"
+dest_files=["res://.godot/imported/HandGun GUNS01_07_3.wav-b9882d54fad1a8410230355d9ecb3752.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

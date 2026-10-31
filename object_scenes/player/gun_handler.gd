@@ -6,7 +6,7 @@ extends Node2D
 @export var flashSpriteUV :Sprite2D
 
 @export var player :PlayerCar
-@export var delay :float = 0.2
+@export var delay :float = 0.15
 @export var delayBoost :float = 0.12
 @export var delayBoost2 :float = 0.11
 @export var accuracy :float = 0.16
@@ -91,4 +91,11 @@ func resetTimer() -> void:
 		2: timer = delayBoost2
 
 func playBulletSound() -> void:
-	pass
+	
+	var node :Node = $"../Sounds/ShootSounds".get_child(randi()%5)
+	
+	node.volume_linear = 0.2
+	node.pitch_scale = randf_range(0.96,1.04) + 0.3
+	node.play()
+	if BULLETMODE == 1:
+		$"../Sounds/ShootSounds/Laser".play()

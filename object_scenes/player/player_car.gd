@@ -58,6 +58,7 @@ var carForceRotate:float = 0.0
 
 
 var engineNoise :FastNoiseLite = FastNoiseLite.new()
+var enginePeakTarget :float = 0.0
 
 func _ready() -> void:
 	
@@ -166,24 +167,52 @@ func _process(delta: float) -> void:
 		
 		target = clamp(target,0.0,0.1)
 		print(target)
-		$Sounds/Drift.pitch_scale = 0.88 - (target*2.0)
+		$Sounds/Drift.pitch_scale = 0.88 - (target*2.0) + (engineNoise.get_noise_1d(Time.get_ticks_msec() * 0.1) * 0.25)
 		$Sounds/Drift.volume_linear = lerp($Sounds/Drift.volume_linear,target,0.25) 
 	
-	$Sounds/Engine.volume_linear = clamp(currentSpeed/400.0,0.2,0.8)
-	$Sounds/Engine.pitch_scale = clamp(currentSpeed / maxSpeed,0.52,0.9) + 0.1 + ((engineNoise.get_noise_1d(Time.get_ticks_msec()*0.1*currentSpeed/400.0))*0.1)
+	if currentSpeed < 100:
+		$Sounds/EngineIdle.volume_linear = lerp($Sounds/EngineIdle.volume_linear,1.0,0.08)
+		$Sounds/EngineRPM1.volume_linear = lerp($Sounds/EngineRPM1.volume_linear,0.0,0.08)
+	else:
+		$Sounds/EngineIdle.volume_linear = lerp($Sounds/EngineIdle.volume_linear,0.0,0.08)
+		$Sounds/EngineRPM1.volume_linear = lerp($Sounds/EngineRPM1.volume_linear,0.6,0.08)
+	
+	if currentSpeed > enginePeakTarget:
+		enginePeakTarget = currentSpeed
+	if currentSpeed <= 400:
+		enginePeakTarget = 400
+	
+	enginePeakTarget = enginePeakTarget - (int(enginePeakTarget) % 100)
+	print(enginePeakTarget)
+	enginePeakTarget = clamp(enginePeakTarget,1,600)
+	$Sounds/EngineRPM1.pitch_scale =  lerp($Sounds/EngineRPM1.pitch_scale,(enginePeakTarget / 200.0) * 0.5,0.08)
 	
 	if Input.is_action_just_pressed("accelerate") and currentSpeed < maxSpeed:
 		match randi() % 3:
 			0: 
-				$Sounds/EngineBoost1.volume_linear = (maxSpeed - currentSpeed ) / maxSpeed
+				$Sounds/EngineBoost1.volume_linear = 6.0
 				$Sounds/EngineBoost1.play()
 			1: 
-				$Sounds/EngineBoost2.volume_linear = (maxSpeed - currentSpeed )/ maxSpeed
+				$Sounds/EngineBoost2.volume_linear = 6.0
 				$Sounds/EngineBoost2.play()
 			2: 
-				$Sounds/EngineBoost3.volume_linear = (maxSpeed - currentSpeed )/ maxSpeed
+				$Sounds/EngineBoost3.volume_linear = 6.0
 				$Sounds/EngineBoost3.play()
-
+	
+	if !drifting:
+		if Input.is_action_just_pressed("turnLeft"):
+			$Sounds/Tire.volume_linear = Vector2(1,0).rotated(wheelFacingAngle).dot(  Vector2(1,0).rotated(wheelMaxAngle) )
+			$Sounds/Tire.volume_linear *= $Sounds/Tire.volume_linear
+			$Sounds/Tire.volume_linear = ($Sounds/Tire.volume_linear * 0.4) - 0.1
+			$Sounds/Tire.pitch_scale = randf_range(0.9,0.95)
+			$Sounds/Tire.play()
+		if Input.is_action_just_pressed("turnRight"):
+			$Sounds/Tire.volume_linear = Vector2(1,0).rotated(wheelFacingAngle).dot(  Vector2(1,0).rotated(wheelMaxAngle*-1) )
+			$Sounds/Tire.volume_linear *= $Sounds/Tire.volume_linear
+			$Sounds/Tire.volume_linear = ($Sounds/Tire.volume_linear * 0.4) - 0.1
+			$Sounds/Tire.pitch_scale = randf_range(0.97,1.02)
+			$Sounds/Tire.play()
+	
 func applyAcceleration(delta:float) -> void:
 	var target :float = 0.0
 	var rate :float = 0.0
