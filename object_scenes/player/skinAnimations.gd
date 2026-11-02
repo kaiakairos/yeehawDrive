@@ -15,6 +15,8 @@ func _process(delta: float) -> void:
 	$HealEffect.scale = $HealEffect.scale.move_toward(Vector2(19,19),delta*60.0)
 	$HealFlash.color.a = move_toward($HealFlash.color.a,0.0,delta*4.0)
 	
+	$"BOOST RING".scale = $"BOOST RING".scale.move_toward(Vector2(20.0,20.0),delta*30.0)
+	$"BOOST RING".modulate.a = lerp($"BOOST RING".modulate.a,0.0,0.06)
 	
 var playingWindshieldWiper :bool = false
 func playAnimWindshieldWiper() -> void:
@@ -42,3 +44,13 @@ func playAnimWindshieldWiper() -> void:
 func _on_health_component_healed(amount: int) -> void:
 	$HealEffect.scale = Vector2.ZERO
 	$HealFlash.color.a = 1.0
+
+func getMegaBoosted() -> void:
+	$"BOOST RING".scale = Vector2.ZERO
+	$"BOOST RING".modulate.a = 1.0
+
+
+func _on_player_car_did_big_boost() -> void:
+	getMegaBoosted()
+	$"../Sounds/Boost".play()
+	$"..".playRandomEngineSound(randf_range(1.8,2.2),7.0)

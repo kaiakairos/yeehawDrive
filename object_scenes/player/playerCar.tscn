@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://4kpqktoop3t0" path="res://object_scenes/player/playerCamera.gd" id="4_i67wl"]
 [ext_resource type="Material" uid="uid://blthl8litkxca" path="res://zeeg/shaders_materials/worldGridPlaceholder/worldGridPlaceholder.tres" id="4_m5nwo"]
 [ext_resource type="Script" uid="uid://bgqml2m1hmbl2" path="res://object_scenes/player/gun_handler.gd" id="5_dnn2p"]
+[ext_resource type="PackedScene" uid="uid://bdqrp1bwtvg82" path="res://object_scenes/wallPolygon/3d_wall_polygon.tscn" id="5_wp0ot"]
 [ext_resource type="Script" uid="uid://b2ojjqp0ucgev" path="res://classes/classHealthComponent.gd" id="7_1pw4n"]
 [ext_resource type="Script" uid="uid://cfr45d0l135cu" path="res://classes/classHitBox.gd" id="8_xgjc2"]
 [ext_resource type="Script" uid="uid://c7efii8nfqvaj" path="res://object_scenes/player/skinAnimations.gd" id="10_gse8d"]
@@ -19,19 +20,28 @@
 [ext_resource type="Script" uid="uid://ceonafxkm0wi8" path="res://object_scenes/player/hit_flash.gd" id="15_y8uur"]
 [ext_resource type="Texture2D" uid="uid://cgj4lvvw5dj4q" path="res://object_scenes/player/sprites/healEffect.png" id="18_5e2l8"]
 [ext_resource type="Script" uid="uid://b7m0ae0gibbw0" path="res://object_scenes/player/pickup_box.gd" id="18_smrv5"]
-[ext_resource type="AudioStream" uid="uid://cfoe54niwcqny" path="res://sound/player/skid.wav" id="20_4p7or"]
-[ext_resource type="AudioStream" uid="uid://c8fsn8vgf7lro" path="res://sound/player/engine2.ogg" id="21_bxyhj"]
-[ext_resource type="AudioStream" uid="uid://bx1fu1hkjtgs7" path="res://sound/player/engine.ogg" id="22_aesod"]
+[ext_resource type="Texture2D" uid="uid://bhiv8i5jhy82n" path="res://object_scenes/player/sprites/boostRING/ring1.png" id="21_8m6m5"]
+[ext_resource type="Texture2D" uid="uid://8j8ysalsdi0" path="res://object_scenes/player/sprites/boostRING/ring2.png" id="22_2nv55"]
 [ext_resource type="AudioStream" uid="uid://bpn8jjucqhgds" path="res://sound/player/engineBoost1.ogg" id="22_cg0dk"]
 [ext_resource type="AudioStream" uid="uid://bbhgd60u4ehjv" path="res://sound/player/engineBoost2.ogg" id="23_75tvc"]
+[ext_resource type="Texture2D" uid="uid://c2ivqhfvs3fpo" path="res://object_scenes/player/sprites/boostRING/ring3.png" id="23_h688o"]
 [ext_resource type="AudioStream" uid="uid://b3m8g0yq4jxlb" path="res://sound/player/engineBoost3.ogg" id="24_gfbpy"]
 [ext_resource type="AudioStream" uid="uid://b8pbprjv21gck" path="res://sound/player/gunshots/HandGun GUNS01_07_1.wav" id="25_nlcss"]
+[ext_resource type="AudioStream" uid="uid://d1iwr0idyl2l1" path="res://sound/player/skid2.ogg" id="25_psbq7"]
 [ext_resource type="AudioStream" uid="uid://bq8ytrpqlndd7" path="res://sound/player/turnTire.ogg" id="25_y5djl"]
+[ext_resource type="AudioStream" uid="uid://c5eo4p5va5gcq" path="res://sound/player/engine/engineIdle.ogg" id="26_psbq7"]
 [ext_resource type="AudioStream" uid="uid://bsfkrpfl7ol3g" path="res://sound/player/gunshots/HandGun GUNS01_07_2.wav" id="26_y5djl"]
+[ext_resource type="AudioStream" uid="uid://cnfpqistl0bkh" path="res://sound/player/engine/engineRPM1.ogg" id="27_a6ma5"]
 [ext_resource type="AudioStream" uid="uid://bwm1jlcth4nvr" path="res://sound/player/gunshots/HandGun GUNS01_07_3.wav" id="27_aesod"]
 [ext_resource type="AudioStream" uid="uid://bpeiifjr3ob6r" path="res://sound/player/gunshots/HandGun GUNS01_07_4.wav" id="28_iij25"]
+[ext_resource type="AudioStream" uid="uid://cs0358jx13i20" path="res://sound/player/engine/engineRPM2.ogg" id="28_osc16"]
+[ext_resource type="AudioStream" uid="uid://dbuehv2b3fwrb" path="res://sound/player/jump.ogg" id="29_h688o"]
+[ext_resource type="AudioStream" uid="uid://dwcqcmyc70wdn" path="res://sound/player/engine/engineRPM3.ogg" id="29_uhebw"]
 [ext_resource type="AudioStream" uid="uid://seemoxfi3u1j" path="res://sound/player/gunshots/HandGun GUNS01_07_5.wav" id="29_wp0ot"]
 [ext_resource type="AudioStream" uid="uid://wmbsegvyt8ea" path="res://sound/player/laser.wav" id="30_nlcss"]
+[ext_resource type="AudioStream" uid="uid://b1e6lwhcs5p24" path="res://sound/player/land.ogg" id="30_wtllg"]
+[ext_resource type="Texture2D" uid="uid://ba4x5hwh63hj1" path="res://object_scenes/player/sprites/speedParticle.png" id="34_wp0ot"]
+[ext_resource type="AudioStream" uid="uid://5iujxdl1y65i" path="res://sound/player/boost.ogg" id="38_2nv55"]
 
 [sub_resource type="Curve" id="Curve_rsetr"]
 _limits = [0.0, 0.2, 0.0, 1.0]
@@ -41,6 +51,10 @@ point_count = 2
 [sub_resource type="Curve" id="Curve_2mpte"]
 _data = [Vector2(0, 0), 0.0, 3.9834328, 0, 0, Vector2(0.5098039, 1), 0.0, 0.0, 0, 0, Vector2(0.76875, 0), -3.6781611, 1.5991997, 0, 0, Vector2(0.878125, 0.4482758), 0.0, 0.0, 0, 0, Vector2(1, 0), -5.614035, 0.0, 0, 0]
 point_count = 5
+
+[sub_resource type="Gradient" id="Gradient_2nv55"]
+offsets = PackedFloat32Array(0, 0.9945097)
+colors = PackedColorArray(0.8901961, 0.99607843, 0, 1, 0.8901961, 0.75686276, 0, 1)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_kytb2"]
 radius = 6.0827627
@@ -61,12 +75,29 @@ colors = PackedColorArray(1, 0.11207495, 0, 1, 1, 0, 0, 1)
 [sub_resource type="ViewportTexture" id="ViewportTexture_kytb2"]
 viewport_path = NodePath("SubViewport")
 
+[sub_resource type="Curve" id="Curve_x5dl4"]
+_data = [Vector2(0, 0), 0.0, 9.001869, 0, 0, Vector2(0.2866152, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_wp0ot"]
+offsets = PackedFloat32Array(0.04377349, 0.73056597)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_y8uur"]
 blend_mode = 1
 
 [sub_resource type="Gradient" id="Gradient_i67wl"]
 offsets = PackedFloat32Array(0, 0.08789954, 0.18835616, 0.23401827, 0.30251142, 0.3892694, 0.5194064, 0.69292235, 1)
 colors = PackedColorArray(18.892157, 18.892157, 18.892157, 1, 18.892157, 0, 0, 1, 14.361845, 0, 0, 1, 18.892157, 9.323401, 9.323401, 1, 1, 1, 1, 1, 1.8005236, 0, 0, 1, 1.517972, 1.3916658, 1.1683453, 1, 1.200701, 0.7877348, 0.40112868, 1, 0, 0, 0, 1)
+
+[sub_resource type="AnimatedTexture" id="AnimatedTexture_wp0ot"]
+frames = 3
+speed_scale = 8.6
+frame_0/texture = ExtResource("21_8m6m5")
+frame_1/texture = ExtResource("22_2nv55")
+frame_1/duration = 1.0
+frame_2/texture = ExtResource("23_h688o")
+frame_2/duration = 1.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4h0gv"]
 radius = 69.354164
@@ -91,6 +122,7 @@ tireMarker1 = NodePath("SpriteGroup/otherContainer/Marker2D")
 tireMarker2 = NodePath("SpriteGroup/otherContainer/Marker2D2")
 tireMarker3 = NodePath("SpriteGroup/otherContainer/Marker2D3")
 tireMarker4 = NodePath("SpriteGroup/otherContainer/Marker2D4")
+driftFlashColor = SubResource("Gradient_2nv55")
 
 [node name="HealthComponent" type="Node" parent="." unique_id=180869992]
 script = ExtResource("7_1pw4n")
@@ -146,6 +178,32 @@ default_color = Color(0, 1, 0, 1)
 points = PackedVector2Array(100, -1, 0, -1)
 width = 2.0
 default_color = Color(1, 0, 0, 1)
+
+[node name="DRIFTWALLRIGHT" type="Node2D" parent="SpriteGroup" unique_id=1126711148]
+
+[node name="wall1" parent="SpriteGroup/DRIFTWALLRIGHT" unique_id=131573931 instance=ExtResource("5_wp0ot")]
+position = Vector2(0, 9.333333)
+color = Color(0.93333334, 0.9529412, 0, 1)
+width = 20.0
+wallHeight = 23.38
+topAdditive = Vector2(0, 5)
+
+[node name="wall2" parent="SpriteGroup/DRIFTWALLRIGHT" unique_id=305242459 instance=ExtResource("5_wp0ot")]
+position = Vector2(0, 10.666667)
+topAdditive = Vector2(0, 5)
+
+[node name="DRIFTWALLLEFT" type="Node2D" parent="SpriteGroup" unique_id=1799085758]
+
+[node name="wall1" parent="SpriteGroup/DRIFTWALLLEFT" unique_id=1445164976 instance=ExtResource("5_wp0ot")]
+position = Vector2(0, -9.333334)
+color = Color(0.93333334, 0.9529412, 0, 1)
+width = 20.0
+wallHeight = 23.38
+topAdditive = Vector2(0, -5)
+
+[node name="wall2" parent="SpriteGroup/DRIFTWALLLEFT" unique_id=467288928 instance=ExtResource("5_wp0ot")]
+position = Vector2(0, -10.666667)
+topAdditive = Vector2(0, -5)
 
 [node name="ProgressBars" type="Node2D" parent="." unique_id=772790919]
 
@@ -215,6 +273,25 @@ position = Vector2(144, -177)
 texture = SubResource("ViewportTexture_kytb2")
 centered = false
 offset = Vector2(0, 0.5)
+
+[node name="SPEEDPARTICLE" type="CPUParticles2D" parent="Camera2D" unique_id=372188922]
+z_index = -6
+position = Vector2(-5, 0)
+amount = 64
+texture = ExtResource("34_wp0ot")
+lifetime = 0.25
+local_coords = true
+emission_shape = 3
+emission_rect_extents = Vector2(350, 350)
+direction = Vector2(-1, 0)
+spread = 1.62
+gravity = Vector2(0, 0)
+initial_velocity_min = 1000.0
+initial_velocity_max = 1000.0
+scale_amount_min = 0.0
+scale_amount_max = 1.5
+scale_amount_curve = SubResource("Curve_x5dl4")
+color_ramp = SubResource("Gradient_wp0ot")
 
 [node name="GunHandler" type="Node2D" parent="." unique_id=404493069 node_paths=PackedStringArray("flashSprite1", "flashSprite2", "flashSpriteUV", "player")]
 script = ExtResource("5_dnn2p")
@@ -322,6 +399,11 @@ offset_right = 96.0
 offset_bottom = 96.0
 color = Color(0.7704825, 1, 0.5053218, 0)
 
+[node name="BOOST RING" type="Sprite2D" parent="SubViewport" unique_id=1672623810]
+position = Vector2(40, 42)
+scale = Vector2(20, 20)
+texture = SubResource("AnimatedTexture_wp0ot")
+
 [node name="PickupBox" type="Area2D" parent="." unique_id=2044666378]
 collision_layer = 0
 collision_mask = 16
@@ -335,63 +417,93 @@ shape = SubResource("CircleShape2D_4h0gv")
 process_mode = 3
 
 [node name="Drift" type="AudioStreamPlayer2D" parent="Sounds" unique_id=718548375]
-stream = ExtResource("20_4p7or")
+stream = ExtResource("25_psbq7")
 volume_db = -80.0
 autoplay = true
 
 [node name="EngineIdle" type="AudioStreamPlayer2D" parent="Sounds" unique_id=416736893]
-stream = ExtResource("21_bxyhj")
+stream = ExtResource("26_psbq7")
 volume_db = -80.0
 autoplay = true
 
 [node name="EngineRPM1" type="AudioStreamPlayer2D" parent="Sounds" unique_id=1575076358]
-stream = ExtResource("22_aesod")
+stream = ExtResource("27_a6ma5")
 volume_db = -80.0
 autoplay = true
 
-[node name="EngineBoost1" type="AudioStreamPlayer2D" parent="Sounds" unique_id=2099455307]
-stream = ExtResource("22_cg0dk")
-max_polyphony = 3
+[node name="EngineRPM2" type="AudioStreamPlayer2D" parent="Sounds" unique_id=1230136304]
+stream = ExtResource("28_osc16")
+volume_db = -80.0
+autoplay = true
 
-[node name="EngineBoost2" type="AudioStreamPlayer2D" parent="Sounds" unique_id=1750908785]
-stream = ExtResource("23_75tvc")
-max_polyphony = 3
-
-[node name="EngineBoost3" type="AudioStreamPlayer2D" parent="Sounds" unique_id=1796357172]
-stream = ExtResource("24_gfbpy")
-max_polyphony = 3
+[node name="EngineRPM3" type="AudioStreamPlayer2D" parent="Sounds" unique_id=1894360535]
+stream = ExtResource("29_uhebw")
+volume_db = -80.0
+autoplay = true
 
 [node name="Tire" type="AudioStreamPlayer2D" parent="Sounds" unique_id=411273018]
 stream = ExtResource("25_y5djl")
 volume_db = -14.176
+
+[node name="Jump" type="AudioStreamPlayer2D" parent="Sounds" unique_id=2070399234]
+stream = ExtResource("29_h688o")
+volume_db = -12.0
+
+[node name="Land" type="AudioStreamPlayer2D" parent="Sounds" unique_id=1958776972]
+stream = ExtResource("30_wtllg")
+volume_db = -19.956
 
 [node name="ShootSounds" type="Node2D" parent="Sounds" unique_id=2120012800]
 
 [node name="Shoot1" type="AudioStreamPlayer2D" parent="Sounds/ShootSounds" unique_id=1466655190]
 stream = ExtResource("25_nlcss")
 max_polyphony = 5
+bus = &"ShootSounds"
 
 [node name="Shoot2" type="AudioStreamPlayer2D" parent="Sounds/ShootSounds" unique_id=2098072319]
 stream = ExtResource("26_y5djl")
 max_polyphony = 5
+bus = &"ShootSounds"
 
 [node name="Shoot3" type="AudioStreamPlayer2D" parent="Sounds/ShootSounds" unique_id=1998275865]
 stream = ExtResource("27_aesod")
 max_polyphony = 5
+bus = &"ShootSounds"
 
 [node name="Shoot4" type="AudioStreamPlayer2D" parent="Sounds/ShootSounds" unique_id=1856880211]
 stream = ExtResource("28_iij25")
 max_polyphony = 5
+bus = &"ShootSounds"
 
 [node name="Shoot5" type="AudioStreamPlayer2D" parent="Sounds/ShootSounds" unique_id=1697401062]
 stream = ExtResource("29_wp0ot")
 max_polyphony = 5
+bus = &"ShootSounds"
 
 [node name="Laser" type="AudioStreamPlayer2D" parent="Sounds/ShootSounds" unique_id=1258358307]
 stream = ExtResource("30_nlcss")
 volume_db = -10.068
 max_polyphony = 5
 
+[node name="Boost" type="AudioStreamPlayer2D" parent="Sounds" unique_id=1101479785]
+stream = ExtResource("38_2nv55")
+max_polyphony = 2
+
+[node name="engineBoosts" type="Node2D" parent="Sounds" unique_id=14024767]
+
+[node name="EngineBoost1" type="AudioStreamPlayer2D" parent="Sounds/engineBoosts" unique_id=2099455307]
+stream = ExtResource("22_cg0dk")
+max_polyphony = 3
+
+[node name="EngineBoost2" type="AudioStreamPlayer2D" parent="Sounds/engineBoosts" unique_id=1750908785]
+stream = ExtResource("23_75tvc")
+max_polyphony = 3
+
+[node name="EngineBoost3" type="AudioStreamPlayer2D" parent="Sounds/engineBoosts" unique_id=1796357172]
+stream = ExtResource("24_gfbpy")
+max_polyphony = 3
+
+[connection signal="didBigBoost" from="." to="SubViewport" method="_on_player_car_did_big_boost"]
 [connection signal="healed" from="HealthComponent" to="SubViewport" method="_on_health_component_healed"]
 [connection signal="healthUpdated" from="HealthComponent" to="." method="_on_health_component_health_updated"]
 [connection signal="healthUpdated" from="HealthComponent" to="ProgressBars/healthbar" method="updateMax"]

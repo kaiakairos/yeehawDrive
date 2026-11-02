@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://dd3k3bcmh44rm" path="res://object_scenes/bulletCasing/bullet_casing.gd" id="1_5h63b"]
 [ext_resource type="Texture2D" uid="uid://bmi6dfyph5mgk" path="res://object_scenes/bulletCasing/casing.png" id="2_kcsmu"]
 [ext_resource type="Texture2D" uid="uid://twslll0tu5pb" path="res://object_scenes/bulletCasing/shadow.png" id="3_kcsmu"]
+[ext_resource type="AudioStream" uid="uid://dt1ah51pc030v" path="res://sound/player/bulletCasing/bulletcasing1.ogg" id="4_nrqjd"]
+[ext_resource type="AudioStream" uid="uid://da2asv4u3xl7e" path="res://sound/player/bulletCasing/bulletcasingFinal1.ogg" id="5_nrqjd"]
 
 [sub_resource type="Curve" id="Curve_kytb2"]
 _data = [Vector2(0, 0), 0.0, 8.206825, 0, 0, Vector2(0.20641273, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.006036401), -3.1375716, 0.0, 0, 0]
@@ -29,3 +31,26 @@ color = Color(0, 0, 0, 0.40784314)
 [node name="Shadow" type="Sprite2D" parent="." unique_id=1413972972]
 z_index = -5
 texture = ExtResource("3_kcsmu")
+
+[node name="sfx2" type="AudioStreamPlayer2D" parent="." unique_id=531763808]
+stream = ExtResource("5_nrqjd")
+volume_db = -5.0
+max_distance = 500.0
+attenuation = 2.070531
+
+[node name="bumpsfx" type="Node2D" parent="." unique_id=1010106684]
+
+[node name="sfxBump" type="AudioStreamPlayer2D" parent="bumpsfx" unique_id=1865937065]
+stream = ExtResource("4_nrqjd")
+volume_db = -6.0
+max_polyphony = 2
+
+[node name="sfxBump2" type="AudioStreamPlayer2D" parent="bumpsfx" unique_id=181133650]
+stream = ExtResource("4_nrqjd")
+volume_db = -6.0
+max_polyphony = 2
+
+[node name="sfxBump3" type="AudioStreamPlayer2D" parent="bumpsfx" unique_id=328068282]
+stream = ExtResource("4_nrqjd")
+volume_db = -6.0
+max_polyphony = 2

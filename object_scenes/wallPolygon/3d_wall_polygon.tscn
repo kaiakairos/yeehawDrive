@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://bdqrp1bwtvg82"]
+
+[ext_resource type="Script" uid="uid://clnttp7nvcnfn" path="res://object_scenes/wallPolygon/3d_wall_polygon.gd" id="1_jqlhb"]
+[ext_resource type="Texture2D" uid="uid://wfp2nf50f7yo" path="res://object_scenes/player/sprites/drifft/yep1.png" id="1_ytvb6"]
+[ext_resource type="Texture2D" uid="uid://dykuk2he0vrqc" path="res://object_scenes/player/sprites/drifft/yep2.png" id="2_y46nb"]
+[ext_resource type="Texture2D" uid="uid://dykq7fquevuk4" path="res://object_scenes/player/sprites/drifft/yep3.png" id="3_1juo5"]
+
+[sub_resource type="AnimatedTexture" id="AnimatedTexture_vk7k7"]
+frames = 3
+speed_scale = 18.0
+frame_0/texture = ExtResource("1_ytvb6")
+frame_1/texture = ExtResource("2_y46nb")
+frame_1/duration = 1.0
+frame_2/texture = ExtResource("3_1juo5")
+frame_2/duration = 1.0
+
+[node name="3DWallPolygon" type="Polygon2D" unique_id=131573931]
+texture = SubResource("AnimatedTexture_vk7k7")
+script = ExtResource("1_jqlhb")

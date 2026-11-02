@@ -4,7 +4,7 @@ extends CharacterBody2D
 @export_group("Stats")
 @export var cameraReachLimit :int = 80.0
 @export var maxSpeed :float = 400.0
-@export var absoluteMaxSpeed :float = 1000.0
+@export var absoluteMaxSpeed :float = 2000.0
 @export var hopTimeAmount :float = 0.25 # time hop takes
 @export var wheelMaxAngle :float = 0.3 # max radian angle that tires rotate to
 @export var frictionMultiplier :float = 1.0
@@ -33,6 +33,8 @@ extends CharacterBody2D
 @export var tireMarker2 :Marker2D
 @export var tireMarker3 :Marker2D
 @export var tireMarker4 :Marker2D
+@export_subgroup("gradients")
+@export var driftFlashColor :Gradient
 
 var wheelFacingAngle :float = 0.0 # -1.0, 0.0, 1.0 for left, center, right
 
@@ -59,6 +61,8 @@ var carForceRotate:float = 0.0
 
 var engineNoise :FastNoiseLite = FastNoiseLite.new()
 var enginePeakTarget :float = 0.0
+
+signal didBigBoost
 
 func _ready() -> void:
 	
@@ -148,6 +152,7 @@ func _process(delta: float) -> void:
 	stackThemSprites()
 	otherContainer.rotation = carDirection.angle()
 	
+	
 	if showDebugLines:
 		updateDebugLines()
 	updateDebugLabels()
@@ -166,53 +171,35 @@ func _process(delta: float) -> void:
 		var target :float = velocity.length() / 5200.0
 		
 		target = clamp(target,0.0,0.1)
-		print(target)
 		$Sounds/Drift.pitch_scale = 0.88 - (target*2.0) + (engineNoise.get_noise_1d(Time.get_ticks_msec() * 0.1) * 0.25)
-		$Sounds/Drift.volume_linear = lerp($Sounds/Drift.volume_linear,target,0.25) 
+		$Sounds/Drift.volume_linear = lerp($Sounds/Drift.volume_linear,target*1.5,0.25) 
 	
-	if currentSpeed < 100:
-		$Sounds/EngineIdle.volume_linear = lerp($Sounds/EngineIdle.volume_linear,1.0,0.08)
-		$Sounds/EngineRPM1.volume_linear = lerp($Sounds/EngineRPM1.volume_linear,0.0,0.08)
-	else:
-		$Sounds/EngineIdle.volume_linear = lerp($Sounds/EngineIdle.volume_linear,0.0,0.08)
-		$Sounds/EngineRPM1.volume_linear = lerp($Sounds/EngineRPM1.volume_linear,0.6,0.08)
-	
-	if currentSpeed > enginePeakTarget:
-		enginePeakTarget = currentSpeed
-	if currentSpeed <= 400:
-		enginePeakTarget = 400
-	
-	enginePeakTarget = enginePeakTarget - (int(enginePeakTarget) % 100)
-	print(enginePeakTarget)
-	enginePeakTarget = clamp(enginePeakTarget,1,600)
-	$Sounds/EngineRPM1.pitch_scale =  lerp($Sounds/EngineRPM1.pitch_scale,(enginePeakTarget / 200.0) * 0.5,0.08)
+	engineSounds(delta)
 	
 	if Input.is_action_just_pressed("accelerate") and currentSpeed < maxSpeed:
-		match randi() % 3:
-			0: 
-				$Sounds/EngineBoost1.volume_linear = 6.0
-				$Sounds/EngineBoost1.play()
-			1: 
-				$Sounds/EngineBoost2.volume_linear = 6.0
-				$Sounds/EngineBoost2.play()
-			2: 
-				$Sounds/EngineBoost3.volume_linear = 6.0
-				$Sounds/EngineBoost3.play()
+		playRandomEngineSound()
 	
 	if !drifting:
 		if Input.is_action_just_pressed("turnLeft"):
 			$Sounds/Tire.volume_linear = Vector2(1,0).rotated(wheelFacingAngle).dot(  Vector2(1,0).rotated(wheelMaxAngle) )
 			$Sounds/Tire.volume_linear *= $Sounds/Tire.volume_linear
-			$Sounds/Tire.volume_linear = ($Sounds/Tire.volume_linear * 0.4) - 0.1
+			$Sounds/Tire.volume_linear = max(0.0,($Sounds/Tire.volume_linear * 0.2) - 0.1)
 			$Sounds/Tire.pitch_scale = randf_range(0.9,0.95)
 			$Sounds/Tire.play()
 		if Input.is_action_just_pressed("turnRight"):
 			$Sounds/Tire.volume_linear = Vector2(1,0).rotated(wheelFacingAngle).dot(  Vector2(1,0).rotated(wheelMaxAngle*-1) )
 			$Sounds/Tire.volume_linear *= $Sounds/Tire.volume_linear
-			$Sounds/Tire.volume_linear = ($Sounds/Tire.volume_linear * 0.4) - 0.1
+			$Sounds/Tire.volume_linear = ($Sounds/Tire.volume_linear * 0.2) - 0.1
 			$Sounds/Tire.pitch_scale = randf_range(0.97,1.02)
 			$Sounds/Tire.play()
 	
+	$Camera2D/SPEEDPARTICLE.rotation = velocity.angle()
+	$Camera2D/SPEEDPARTICLE.emitting = trueVelocity.length() > 1000.0 and !drifting
+	
+	coolDriftEffect()
+	
+	
+		
 func applyAcceleration(delta:float) -> void:
 	var target :float = 0.0
 	var rate :float = 0.0
@@ -222,15 +209,28 @@ func applyAcceleration(delta:float) -> void:
 	else:
 		rate = 100.0 + (700.0 * int(Input.is_action_pressed("brake")))
 	
-	currentSpeed = move_toward(currentSpeed,target,delta*rate)
+	if !drifting:
+		currentSpeed = move_toward(currentSpeed,target,delta*rate)
 	currentSpeed = min(currentSpeed,absoluteMaxSpeed) # cap speed
 
 func driveStateNormal(delta:float) -> void:
 	trueVelocity = trueVelocity.move_toward(carDirection.normalized() * currentSpeed,delta*1800.0*frictionMultiplier)
 	spriteStackContainer.modulate = Color.WHITE
 	if drifting and Input.is_action_pressed("accelerate"):
-		currentSpeed = currentSpeed + driftboost
-		trueVelocity = trueVelocity.move_toward(carDirection.normalized() * currentSpeed,delta*1200.0*frictionMultiplier)
+		var hold :float = currentSpeed
+		if driftboost > 900:
+			currentSpeed = max(1200,currentSpeed)
+		elif driftboost > 250:
+			currentSpeed = max(975,currentSpeed)
+		elif driftboost > 50:
+			currentSpeed = max(650,currentSpeed)
+		else:
+			currentSpeed = max(maxSpeed,currentSpeed)
+		
+		if currentSpeed > 974:
+			emit_signal("didBigBoost")
+		
+		trueVelocity = trueVelocity.move_toward(carDirection.normalized() * currentSpeed,delta*3200.0*frictionMultiplier)
 	drifting = false
 	driftboost = 0.0
 
@@ -269,14 +269,24 @@ func checkforHopInput() -> void: # Check to see if we've jumped and apply state 
 		state = 1
 		hopTimer = 0.0
 		driftboost = 0.0
+		$Sounds/Jump.play()
 
+var playedLandSound :bool = false
 func hoppingState(delta:float) -> void: # hopping behavior
 	carDirection = carDirection.rotated( wheelFacingAngle * delta * 8.0 )
 	#spriteStackContainer.modulate = Color.YELLOW
 	hopTimer += delta
+	
+	if hopTimer/hopTimeAmount > 0.73 and !playedLandSound:
+		$Sounds/Land.play()
+		playedLandSound = true
+	
 	if hopTimer > hopTimeAmount:
 		state = 0
 		driftVelLengthSave = trueVelocity.length()
+		playedLandSound = false
+	
+		
 	var hopSample :float = hopAnimationCurve.sample( hopTimer/hopTimeAmount)
 	spriteStackContainer.position.y = hopSample * -8.0
 	wheelStackContainer.position.y = spriteStackContainer.position.y
@@ -375,3 +385,94 @@ func antennaAnimation() -> void:
 
 func _on_health_component_health_updated(health: int, maxHealth: int) -> void:
 	$ProgressBars/healthbar.modulate.a = 10.0
+
+func playRandomEngineSound(pitch:float=1.0,vol:float=6.0):
+	var soundingRod = $Sounds/engineBoosts.get_child(randi() % 3)
+	soundingRod.pitch_scale = pitch
+	soundingRod.volume_linear = vol
+	soundingRod.play()
+
+func coolDriftEffect() -> void:
+	if drifting:
+		
+		$SpriteGroup/DRIFTWALLRIGHT/wall1.color = driftFlashColor.sample( driftboost / 900.0 )
+		$SpriteGroup/DRIFTWALLLEFT/wall1.color = $SpriteGroup/DRIFTWALLRIGHT/wall1.color
+		
+		$SpriteGroup/DRIFTWALLRIGHT.rotation = carDirection.angle()
+		$SpriteGroup/DRIFTWALLLEFT.rotation = carDirection.angle()
+		if otherContainer.rotation != clamp(otherContainer.rotation,-PI/2,PI/2):
+			$SpriteGroup.move_child($SpriteGroup/DRIFTWALLRIGHT,0)
+			$SpriteGroup.move_child($SpriteGroup/DRIFTWALLLEFT,6)
+			
+		else:
+			$SpriteGroup.move_child($SpriteGroup/DRIFTWALLRIGHT,6)
+			$SpriteGroup.move_child($SpriteGroup/DRIFTWALLLEFT,0)
+		
+		var dot1 :float= carDirection.normalized().dot( velocity.normalized() )
+		
+		$SpriteGroup/DRIFTWALLRIGHT/wall1.scale = Vector2(1.0,1.0) * (1.0 - abs(dot1))
+		$SpriteGroup/DRIFTWALLRIGHT/wall2.scale = Vector2(1.0,1.0) * (1.0 - abs(dot1))
+		$SpriteGroup/DRIFTWALLLEFT/wall1.scale = Vector2(1.0,1.0) * (1.0 - abs(dot1))
+		$SpriteGroup/DRIFTWALLLEFT/wall2.scale = Vector2(1.0,1.0) * (1.0 - abs(dot1))
+			
+			
+		var dot2 :float= carDirection.normalized().dot( velocity.normalized().rotated(PI/2) )
+		$SpriteGroup/DRIFTWALLRIGHT/wall1.visible = dot2 < 0
+		$SpriteGroup/DRIFTWALLRIGHT/wall2.visible = dot2 < 0
+		$SpriteGroup/DRIFTWALLLEFT/wall1.visible = dot2 > 0
+		$SpriteGroup/DRIFTWALLLEFT/wall2.visible = dot2 > 0
+	else:
+		$SpriteGroup/DRIFTWALLRIGHT/wall1.hide()
+		$SpriteGroup/DRIFTWALLRIGHT/wall2.hide()
+		$SpriteGroup/DRIFTWALLLEFT/wall1.hide()
+		$SpriteGroup/DRIFTWALLLEFT/wall2.hide()
+
+func engineSounds(delta:float) -> void:
+	
+	var targetVol :float = 0.07
+	
+	if currentSpeed > 1000:
+		$Sounds/EngineRPM3.pitch_scale = lerp($Sounds/EngineRPM3.pitch_scale,1.2,0.08)
+	
+	if currentSpeed > 800:
+		$Sounds/EngineIdle.volume_linear = lerp($Sounds/EngineIdle.volume_linear,0.0,0.08)
+		$Sounds/EngineRPM1.volume_linear = lerp($Sounds/EngineRPM1.volume_linear,0.0,0.08)
+		$Sounds/EngineRPM2.volume_linear = lerp($Sounds/EngineRPM2.volume_linear,0.0,0.08)
+		$Sounds/EngineRPM3.volume_linear = lerp($Sounds/EngineRPM3.volume_linear,targetVol,0.08)
+		
+		$Sounds/EngineRPM1.pitch_scale = lerp($Sounds/EngineRPM1.pitch_scale,0.5,0.08)
+		$Sounds/EngineRPM2.pitch_scale = lerp($Sounds/EngineRPM2.pitch_scale,1.25,0.08)
+		$Sounds/EngineRPM3.pitch_scale = lerp($Sounds/EngineRPM3.pitch_scale,1.0,0.08)
+		
+	elif currentSpeed > 400:
+		$Sounds/EngineIdle.volume_linear = lerp($Sounds/EngineIdle.volume_linear,0.0,0.08)
+		$Sounds/EngineRPM1.volume_linear = lerp($Sounds/EngineRPM1.volume_linear,0.0,0.08)
+		$Sounds/EngineRPM2.volume_linear = lerp($Sounds/EngineRPM2.volume_linear,targetVol,0.08)
+		$Sounds/EngineRPM3.volume_linear = lerp($Sounds/EngineRPM3.volume_linear,0.0,0.08)
+		
+		
+		$Sounds/EngineRPM1.pitch_scale = lerp($Sounds/EngineRPM1.pitch_scale,1.25,0.08)
+		$Sounds/EngineRPM2.pitch_scale = lerp($Sounds/EngineRPM2.pitch_scale,1.0,0.08)
+		$Sounds/EngineRPM3.pitch_scale = lerp($Sounds/EngineRPM3.pitch_scale,0.75,0.08)
+		
+	elif currentSpeed > 100:
+		$Sounds/EngineIdle.volume_linear = lerp($Sounds/EngineIdle.volume_linear,0.0,0.08)
+		$Sounds/EngineRPM1.volume_linear = lerp($Sounds/EngineRPM1.volume_linear,targetVol,0.08)
+		$Sounds/EngineRPM2.volume_linear = lerp($Sounds/EngineRPM2.volume_linear,0.0,0.08)
+		$Sounds/EngineRPM3.volume_linear = lerp($Sounds/EngineRPM3.volume_linear,0.0,0.08)
+		
+		
+		$Sounds/EngineRPM1.pitch_scale = lerp($Sounds/EngineRPM1.pitch_scale,1.0,0.08)
+		$Sounds/EngineRPM2.pitch_scale = lerp($Sounds/EngineRPM2.pitch_scale,0.75,0.08)
+		$Sounds/EngineRPM3.pitch_scale = lerp($Sounds/EngineRPM3.pitch_scale,0.1,0.08)
+		
+	else:
+		$Sounds/EngineIdle.volume_linear = lerp($Sounds/EngineIdle.volume_linear,targetVol,0.08)
+		$Sounds/EngineRPM1.volume_linear = lerp($Sounds/EngineRPM1.volume_linear,0.0,0.08)
+		$Sounds/EngineRPM2.volume_linear = lerp($Sounds/EngineRPM2.volume_linear,0.0,0.08)
+		$Sounds/EngineRPM3.volume_linear = lerp($Sounds/EngineRPM3.volume_linear,0.0,0.08)
+		
+		$Sounds/EngineRPM1.pitch_scale = lerp($Sounds/EngineRPM1.pitch_scale,0.75,0.08)
+		$Sounds/EngineRPM2.pitch_scale = lerp($Sounds/EngineRPM2.pitch_scale,0.2,0.08)
+		$Sounds/EngineRPM3.pitch_scale = lerp($Sounds/EngineRPM3.pitch_scale,0.1,0.08)
+	
