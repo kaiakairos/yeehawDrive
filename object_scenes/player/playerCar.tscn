@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://b1a3ff0tffs74" path="res://object_scenes/player/sprites/shadow.png" id="2_2mpte"]
 [ext_resource type="Shader" uid="uid://b113as8ovxkwt" path="res://zeeg/shaders_materials/canvasOutlineWithUV/canvasGroupOutlineWithUV.gdshader" id="2_b61pa"]
 [ext_resource type="Material" uid="uid://dpas1j5aixd1e" path="res://zeeg/shaders_materials/canvasGroupOutline/canvasGroupOutline.tres" id="2_eamtm"]
+[ext_resource type="Script" uid="uid://ve3binsn7044" path="res://object_scenes/player/sprite_group.gd" id="4_a6ma5"]
 [ext_resource type="Texture2D" uid="uid://bcps8mno6b8bl" path="res://object_scenes/player/sprites/flash.png" id="4_eamtm"]
 [ext_resource type="PackedScene" uid="uid://bh2ea7pbxgj5v" path="res://ui_scenes/simpleProgressBar/simple_progress_bar.tscn" id="4_g632t"]
 [ext_resource type="Script" uid="uid://4kpqktoop3t0" path="res://object_scenes/player/playerCamera.gd" id="4_i67wl"]
@@ -52,10 +53,6 @@ point_count = 2
 _data = [Vector2(0, 0), 0.0, 3.9834328, 0, 0, Vector2(0.5098039, 1), 0.0, 0.0, 0, 0, Vector2(0.76875, 0), -3.6781611, 1.5991997, 0, 0, Vector2(0.878125, 0.4482758), 0.0, 0.0, 0, 0, Vector2(1, 0), -5.614035, 0.0, 0, 0]
 point_count = 5
 
-[sub_resource type="Gradient" id="Gradient_2nv55"]
-offsets = PackedFloat32Array(0, 0.9945097)
-colors = PackedColorArray(0.8901961, 0.99607843, 0, 1, 0.8901961, 0.75686276, 0, 1)
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_kytb2"]
 radius = 6.0827627
 
@@ -68,6 +65,10 @@ shader = ExtResource("2_b61pa")
 shader_parameter/line_colour = Color(0, 0, 0, 1)
 shader_parameter/line_thickness = 1
 shader_parameter/uvMapTexture = SubResource("ViewportTexture_nct0c")
+
+[sub_resource type="Gradient" id="Gradient_2nv55"]
+offsets = PackedFloat32Array(0, 0.9945097)
+colors = PackedColorArray(0.8901961, 0.99607843, 0, 1, 0.8901961, 0.75686276, 0, 1)
 
 [sub_resource type="Gradient" id="Gradient_k6d32"]
 colors = PackedColorArray(1, 0.11207495, 0, 1, 1, 0, 0, 1)
@@ -102,10 +103,11 @@ frame_2/duration = 1.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_4h0gv"]
 radius = 69.354164
 
-[node name="PlayerCar" type="CharacterBody2D" unique_id=1822216303 node_paths=PackedStringArray("spriteStackContainer", "wheelStackContainer", "otherContainer", "camera", "gunHandler", "shadow", "debugLineVelocity", "debugLineCarFacingDir", "dbeugLineWheelFacingDir", "label1", "label2", "tireMarker1", "tireMarker2", "tireMarker3", "tireMarker4")]
+[node name="PlayerCar" type="CharacterBody2D" unique_id=1822216303 node_paths=PackedStringArray("spriteGroup", "spriteStackContainer", "wheelStackContainer", "otherContainer", "camera", "gunHandler", "shadow", "debugLineVelocity", "debugLineCarFacingDir", "dbeugLineWheelFacingDir", "label1", "label2", "tireMarker1", "tireMarker2", "tireMarker3", "tireMarker4")]
 script = ExtResource("1_rsetr")
 turnStrengthCurve = SubResource("Curve_rsetr")
 hopAnimationCurve = SubResource("Curve_2mpte")
+spriteGroup = NodePath("SpriteGroup")
 spriteStackContainer = NodePath("SpriteGroup/spriteContainer")
 wheelStackContainer = NodePath("SpriteGroup/wheelContainer")
 otherContainer = NodePath("SpriteGroup/otherContainer")
@@ -122,7 +124,6 @@ tireMarker1 = NodePath("SpriteGroup/otherContainer/Marker2D")
 tireMarker2 = NodePath("SpriteGroup/otherContainer/Marker2D2")
 tireMarker3 = NodePath("SpriteGroup/otherContainer/Marker2D3")
 tireMarker4 = NodePath("SpriteGroup/otherContainer/Marker2D4")
-driftFlashColor = SubResource("Gradient_2nv55")
 
 [node name="HealthComponent" type="Node" parent="." unique_id=180869992]
 script = ExtResource("7_1pw4n")
@@ -132,9 +133,18 @@ metadata/_custom_type_script = "uid://b2ojjqp0ucgev"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=83995325]
 shape = SubResource("CircleShape2D_kytb2")
 
-[node name="SpriteGroup" type="CanvasGroup" parent="." unique_id=1294703876]
+[node name="SpriteGroup" type="CanvasGroup" parent="." unique_id=1294703876 node_paths=PackedStringArray("playerCar", "wallRightContainer", "wallLeftContainer", "rightWall1", "rightWall2", "leftWall1", "leftWall2")]
 material = SubResource("ShaderMaterial_gse8d")
 scale = Vector2(1, 0.75)
+script = ExtResource("4_a6ma5")
+playerCar = NodePath("..")
+driftFlashColor = SubResource("Gradient_2nv55")
+wallRightContainer = NodePath("DRIFTWALLRIGHT")
+wallLeftContainer = NodePath("DRIFTWALLLEFT")
+rightWall1 = NodePath("DRIFTWALLRIGHT/wall1")
+rightWall2 = NodePath("DRIFTWALLRIGHT/wall2")
+leftWall1 = NodePath("DRIFTWALLLEFT/wall1")
+leftWall2 = NodePath("DRIFTWALLLEFT/wall2")
 
 [node name="wheelContainer" type="Node2D" parent="SpriteGroup" unique_id=599864906]
 
@@ -185,7 +195,7 @@ default_color = Color(1, 0, 0, 1)
 position = Vector2(0, 9.333333)
 color = Color(0.93333334, 0.9529412, 0, 1)
 width = 20.0
-wallHeight = 23.38
+wallHeight = 24.0
 topAdditive = Vector2(0, 5)
 
 [node name="wall2" parent="SpriteGroup/DRIFTWALLRIGHT" unique_id=305242459 instance=ExtResource("5_wp0ot")]
@@ -198,7 +208,7 @@ topAdditive = Vector2(0, 5)
 position = Vector2(0, -9.333334)
 color = Color(0.93333334, 0.9529412, 0, 1)
 width = 20.0
-wallHeight = 23.38
+wallHeight = 24.0
 topAdditive = Vector2(0, -5)
 
 [node name="wall2" parent="SpriteGroup/DRIFTWALLLEFT" unique_id=467288928 instance=ExtResource("5_wp0ot")]

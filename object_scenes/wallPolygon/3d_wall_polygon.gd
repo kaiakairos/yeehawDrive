@@ -1,3 +1,4 @@
+class_name WallPolygon
 extends Polygon2D
 
 @export var width :float = 16.0
@@ -22,13 +23,13 @@ func _ready() -> void:
 	
 	uv = uvPoly
 	
-func _process(delta: float) -> void:
+#func _process(delta: float) -> void:
 
-	if saveRotation != global_rotation:
+#	if saveRotation != global_rotation:
 		
-		drawPolygon()
+#		drawPolygon()
 		
-		saveRotation = global_rotation
+#		saveRotation = global_rotation
 
 func drawPolygon() -> void:
 	var newPoly :PackedVector2Array = PackedVector2Array()

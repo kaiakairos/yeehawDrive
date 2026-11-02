@@ -12,6 +12,7 @@ extends CharacterBody2D
 @export var turnStrengthCurve :Curve
 @export var hopAnimationCurve :Curve
 @export_group("Nodes")
+@export var spriteGroup :CanvasGroup
 @export var spriteStackContainer :Node2D
 @export var wheelStackContainer :Node2D
 @export var otherContainer :Node2D
@@ -33,8 +34,6 @@ extends CharacterBody2D
 @export var tireMarker2 :Marker2D
 @export var tireMarker3 :Marker2D
 @export var tireMarker4 :Marker2D
-@export_subgroup("gradients")
-@export var driftFlashColor :Gradient
 
 var wheelFacingAngle :float = 0.0 # -1.0, 0.0, 1.0 for left, center, right
 
@@ -196,7 +195,7 @@ func _process(delta: float) -> void:
 	$Camera2D/SPEEDPARTICLE.rotation = velocity.angle()
 	$Camera2D/SPEEDPARTICLE.emitting = trueVelocity.length() > 1000.0 and !drifting
 	
-	coolDriftEffect()
+	spriteGroup.coolDriftEffect()
 	
 	
 		
@@ -392,40 +391,7 @@ func playRandomEngineSound(pitch:float=1.0,vol:float=6.0):
 	soundingRod.volume_linear = vol
 	soundingRod.play()
 
-func coolDriftEffect() -> void:
-	if drifting:
-		
-		$SpriteGroup/DRIFTWALLRIGHT/wall1.color = driftFlashColor.sample( driftboost / 900.0 )
-		$SpriteGroup/DRIFTWALLLEFT/wall1.color = $SpriteGroup/DRIFTWALLRIGHT/wall1.color
-		
-		$SpriteGroup/DRIFTWALLRIGHT.rotation = carDirection.angle()
-		$SpriteGroup/DRIFTWALLLEFT.rotation = carDirection.angle()
-		if otherContainer.rotation != clamp(otherContainer.rotation,-PI/2,PI/2):
-			$SpriteGroup.move_child($SpriteGroup/DRIFTWALLRIGHT,0)
-			$SpriteGroup.move_child($SpriteGroup/DRIFTWALLLEFT,6)
-			
-		else:
-			$SpriteGroup.move_child($SpriteGroup/DRIFTWALLRIGHT,6)
-			$SpriteGroup.move_child($SpriteGroup/DRIFTWALLLEFT,0)
-		
-		var dot1 :float= carDirection.normalized().dot( velocity.normalized() )
-		
-		$SpriteGroup/DRIFTWALLRIGHT/wall1.scale = Vector2(1.0,1.0) * (1.0 - abs(dot1))
-		$SpriteGroup/DRIFTWALLRIGHT/wall2.scale = Vector2(1.0,1.0) * (1.0 - abs(dot1))
-		$SpriteGroup/DRIFTWALLLEFT/wall1.scale = Vector2(1.0,1.0) * (1.0 - abs(dot1))
-		$SpriteGroup/DRIFTWALLLEFT/wall2.scale = Vector2(1.0,1.0) * (1.0 - abs(dot1))
-			
-			
-		var dot2 :float= carDirection.normalized().dot( velocity.normalized().rotated(PI/2) )
-		$SpriteGroup/DRIFTWALLRIGHT/wall1.visible = dot2 < 0
-		$SpriteGroup/DRIFTWALLRIGHT/wall2.visible = dot2 < 0
-		$SpriteGroup/DRIFTWALLLEFT/wall1.visible = dot2 > 0
-		$SpriteGroup/DRIFTWALLLEFT/wall2.visible = dot2 > 0
-	else:
-		$SpriteGroup/DRIFTWALLRIGHT/wall1.hide()
-		$SpriteGroup/DRIFTWALLRIGHT/wall2.hide()
-		$SpriteGroup/DRIFTWALLLEFT/wall1.hide()
-		$SpriteGroup/DRIFTWALLLEFT/wall2.hide()
+
 
 func engineSounds(delta:float) -> void:
 	
