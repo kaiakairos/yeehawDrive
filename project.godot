@@ -16,10 +16,20 @@ config/features=PackedStringArray("4.7", "GL Compatibility")
 run/max_fps=60
 config/icon="res://icon.svg"
 
+[audio]
+
+buses/default_bus_layout="uid://bthrh5uqvvvdh"
+
 [autoload]
 
 GlobalReference="*uid://wmv8345x1830"
 ManagerDamager="*uid://c4r10j51vnr06"
+
+[debug]
+
+gdscript/warnings/unused_parameter=0
+gdscript/warnings/integer_division=0
+gdscript/warnings/narrowing_conversion=0
 
 [display]
 

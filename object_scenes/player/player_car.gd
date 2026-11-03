@@ -216,7 +216,7 @@ func driveStateNormal(delta:float) -> void:
 	trueVelocity = trueVelocity.move_toward(carDirection.normalized() * currentSpeed,delta*1800.0*frictionMultiplier)
 	spriteStackContainer.modulate = Color.WHITE
 	if drifting and Input.is_action_pressed("accelerate"):
-		var hold :float = currentSpeed
+		#var hold :float = currentSpeed
 		if driftboost > 900:
 			currentSpeed = max(1200,currentSpeed)
 		elif driftboost > 250:
