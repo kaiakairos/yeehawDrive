@@ -70,6 +70,10 @@ shader_parameter/uvMapTexture = SubResource("ViewportTexture_nct0c")
 offsets = PackedFloat32Array(0, 0.9945097)
 colors = PackedColorArray(0.8901961, 0.99607843, 0, 1, 0.8901961, 0.75686276, 0, 1)
 
+[sub_resource type="Curve" id="Curve_a6ma5"]
+_data = [Vector2(0, 0.5846154), 0.0, 3.7466059, 0, 0, Vector2(0.3405797, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
 [sub_resource type="Gradient" id="Gradient_k6d32"]
 colors = PackedColorArray(1, 0.11207495, 0, 1, 1, 0, 0, 1)
 
@@ -145,6 +149,19 @@ rightWall1 = NodePath("DRIFTWALLRIGHT/wall1")
 rightWall2 = NodePath("DRIFTWALLRIGHT/wall2")
 leftWall1 = NodePath("DRIFTWALLLEFT/wall1")
 leftWall2 = NodePath("DRIFTWALLLEFT/wall2")
+
+[node name="driftParticles" type="CPUParticles2D" parent="SpriteGroup" unique_id=2094080074]
+amount = 16
+lifetime = 0.25
+fixed_fps = 24
+emission_shape = 3
+emission_rect_extents = Vector2(12, 6)
+gravity = Vector2(0, 0)
+angle_min = -180.0
+angle_max = 180.0
+scale_amount_min = 2.0
+scale_amount_max = 5.0
+scale_amount_curve = SubResource("Curve_a6ma5")
 
 [node name="wheelContainer" type="Node2D" parent="SpriteGroup" unique_id=599864906]
 
