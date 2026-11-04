@@ -84,5 +84,5 @@ func coolDriftEffect() -> void:
 		leftWall1.drawPolygon()
 		leftWall2.drawPolygon()
 	
-	$driftParticles.emitting = playerCar.drifting or playerCar.currentSpeed > 840
+	$driftParticles.emitting = playerCar.drifting# or playerCar.currentSpeed > 840
 	
